@@ -51,3 +51,6 @@ Les contributions à ce projet sont les bienvenues. Pour contribuer, veuillez su
 4- Soumettez une demande d'extraction (pull request) vers la branche master de ce dépôt.
 Pour signaler des problèmes ou discuter des améliorations potentielles, veuillez ouvrir une issue.
 
+## Auteur
+Ali KHLIFI
+

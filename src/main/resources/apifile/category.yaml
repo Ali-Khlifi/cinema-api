@@ -1,0 +1,150 @@
+# replace category to define the default model covered by this document, first letter must be uppercase
+# replace category to define the default path of endpoints in this document, first letter must be lowercase
+# add missing endpoints
+# N.B. : must then be added to the pom to generate the controller and its associated models
+
+openapi: 3.0.0
+info:
+  description: 'Category API'
+  title: 'Category API'
+  version: '0.0.1'
+paths:
+  /category:
+    get:
+      tags:
+        - Category
+      summary: 'all categories'
+      operationId: findAll
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryOpenApiModel'
+    post:
+      tags:
+        - category
+      summary: 'create a new category'
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryOpenApiModel'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryOpenApiModel'
+    put:
+      tags:
+        - category
+      summary: 'Update existing category'
+      operationId: update
+      requestBody:
+        description: 'Update existing category'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryOpenApiModel'
+
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryOpenApiModel'
+
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /category/{id}:
+    get:
+      tags:
+        - category
+      summary: 'Specific category'
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: 'Find category by id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - category
+      summary: 'delete a Category'
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a category by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: DELETED
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    'CategoryOpenApiModel':
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          maxLength: 75
+
+    Error:
+      description: 'format message for error return HTTP'
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string

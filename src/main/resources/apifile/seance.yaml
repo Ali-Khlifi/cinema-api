@@ -1,0 +1,150 @@
+# replace seance to define the default model covered by this document, first letter must be uppercase
+# replace seance to define the default path of endpoints in this document, first letter must be lowercase
+# add missing endpoints
+# N.B. : must then be added to the pom to generate the controller and its associated models
+
+openapi: 3.0.0
+info:
+  description: 'Seance API'
+  title: 'Seance API'
+  version: '0.0.1'
+paths:
+  /seance:
+    get:
+      tags:
+        - Seance
+      summary: 'all seances'
+      operationId: findAll
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeanceOpenApiModel'
+    post:
+      tags:
+        - Seance
+      summary: 'create a new seance'
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeanceOpenApiModel'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeanceOpenApiModel'
+    put:
+      tags:
+        - Seance
+      summary: 'Update existing seance'
+      operationId: update
+      requestBody:
+        description: 'Update existing seance'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeanceOpenApiModel'
+
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeanceOpenApiModel'
+
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /seance/{id}:
+    get:
+      tags:
+        - Seance
+      summary: 'Specific seance'
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: 'Find seance by id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeanceOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Seance
+      summary: 'delete a Seance'
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a seance by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: DELETED
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    'SeanceOpenApiModel':
+      type: object
+      required:
+        - heureDebut
+      properties:
+        id:
+          type: integer
+          format: int64
+        heureDebut:
+          type: string
+          format: date-time
+
+    Error:
+      description: 'format message for error return HTTP'
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string

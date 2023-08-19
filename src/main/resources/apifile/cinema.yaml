@@ -1,0 +1,203 @@
+# replace cinema to define the default model covered by this document, first letter must be uppercase
+# replace cinema to define the default path of endpoints in this document, first letter must be lowercase
+# add missing endpoints
+# N.B. : must then be added to the pom to generate the controller and its associated models
+
+openapi: '3.0.0'
+info:
+  description: 'Cinema API'
+  version: '0.0.1'
+  title: 'OpenAPI Cinema'
+tags:
+  - name: Cinema
+paths:
+  /cinema:
+    get:
+      tags:
+        - Cinema
+      summary: 'all Cinemas'
+      operationId: findAll
+      responses:
+        '200':
+           description: 'OK'
+           content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                      $ref: '#/components/schemas/CinemaOpenApiModel'
+    post:
+      tags:
+        - Cinema
+      summary: 'create new cinema'
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CinemaOpenApiModel'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CinemaOpenApiModel'
+    put:
+      tags:
+        - Cinema
+      summary: 'Update existing cinema'
+      operationId: update
+      requestBody:
+        description: 'Update existing cinema'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CinemaOpenApiModel'
+
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CinemaOpenApiModel'
+
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /cinema/{id}:
+    get:
+      tags:
+        - Cinema
+      summary: 'Specific Cinema'
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a Cinema by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CinemaOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Cinema
+      summary: 'delete a Cinema'
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a Cinema by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: DELETED
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /cinema/byVille:
+    get:
+      tags:
+        - Cinema
+      summary: 'Cinemas by Ville'
+      operationId: findByVille
+      parameters:
+        - name: ville
+          in: query
+          description: 'Find cinemas by its ville'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CinemaOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    'CinemaOpenApiModel':
+      description: 'Object representing a currently accessible ressource'
+      type: object
+      required:
+        - name
+        - longitude
+        - latitude
+        - altitude
+        - nombreSalles
+        - villeId
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        longitude:
+          type: number
+          format: double
+        latitude:
+          type: number
+          format: double
+        altitude:
+          type: number
+          format: double
+        nombreSalles:
+          type: integer
+        villeId:
+          type: integer
+          format: int64
+
+    Error:
+      description: 'format message for error return HTTP'
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+
+
+
+
+

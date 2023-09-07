@@ -14,11 +14,15 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Table(name = "cinema")
+
 public class Cinema implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private double longitude, latitude, altitude;
+    @Column(nullable=true)
+    private String adresse;
     private int nombreSalles;
     // association biderectionnel ---> mappedBy
     // manppedBy "cinema" ici car OneToMany est de coté Cinema

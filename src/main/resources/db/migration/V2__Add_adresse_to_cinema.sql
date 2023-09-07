@@ -1,1 +1,1 @@
-ALTER TABLE cinema ADD COLUMN adresse2 VARCHAR(255);
+ALTER TABLE public.cinema ADD COLUMN adresse VARCHAR(255);

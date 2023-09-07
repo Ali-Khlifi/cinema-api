@@ -14,6 +14,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+
 public class Cinema implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

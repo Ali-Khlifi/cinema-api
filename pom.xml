@@ -70,6 +70,11 @@
             <artifactId>hibernate-validator</artifactId>
             <version>7.0.1.Final</version>
         </dependency>
+        <!-- db-migrations -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
 
         <!-- DOCS -->
         <dependency>
@@ -128,7 +133,6 @@
             </resource>
         </resources>
         <plugins>
-            <!-- TODO: jacoco does not support java 17 (maybe ?), find an alternative -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

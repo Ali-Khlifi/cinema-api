@@ -19,6 +19,8 @@ public class Cinema implements Serializable {
     private Long id;
     private String name;
     private double longitude, latitude, altitude;
+    @Column(nullable=true)
+    private String adresse;
     private int nombreSalles;
     // association biderectionnel ---> mappedBy
     // manppedBy "cinema" ici car OneToMany est de coté Cinema

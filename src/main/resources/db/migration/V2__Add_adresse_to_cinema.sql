@@ -1,1 +1,0 @@
-ALTER TABLE public.cinema ADD COLUMN adresse VARCHAR(255);

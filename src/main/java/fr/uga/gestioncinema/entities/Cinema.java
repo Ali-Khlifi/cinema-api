@@ -14,6 +14,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Table(name = "cinema")
 
 public class Cinema implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

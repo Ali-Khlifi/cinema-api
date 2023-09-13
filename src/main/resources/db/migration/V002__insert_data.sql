@@ -46,9 +46,9 @@ VALUES
 -- Insert data into Film
 INSERT INTO public.film (titre, duree, realisateur, description, photo, date_sortie, category_id)
 VALUES
-    ('Film d''Action', 120, 'John Doe', 'Un film d''action captivant', 'action.jpg', '2023-05-01', 1),
-    ('Film Comique', 90, 'Jane Doe', 'Un film comique pour toute la famille', 'comedy.jpg', '2023-05-01', 2),
-    ('Film d''Horreur', 110, 'James Smith', 'Un film qui vous fera frissonner', 'horror.jpg', '2023-06-01', 4),
+    ('Film d''Action', 120, 'John Doe', 'Un film d''action captivant', 'Punisher.jpg', '2023-05-01', 1),
+    ('Film Comique', 90, 'Jane Doe', 'Un film comique pour toute la famille', 'Friends.jpg', '2023-05-01', 2),
+    ('Film d''Horreur', 110, 'James Smith', 'Un film qui vous fera frissonner', 'needForSpeed.jpg', '2023-06-01', 4),
     ('Film Documentaire', 130, 'Anna Johnson', 'Un regard sur la nature', 'documentary.jpg', '2023-07-01', 6);
 
 -- Insert data into FilmProjection

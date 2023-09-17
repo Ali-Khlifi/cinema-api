@@ -81,10 +81,9 @@ class CategoryServiceImpTest {
     void TestSave() {
         // given
         final var id = 1L;
-        final var name = "name";
-        final var dto = CategoryDto.builder().id(id).name(name).build();
-        final var entity = Category.builder().id(id).name(name).build();
-        final var expected = CategoryDto.builder().id(id).name(name).build();
+        final var dto = CategoryDto.builder().id(id).build();
+        final var entity = Category.builder().id(id).build();
+        final var expected = CategoryDto.builder().id(id).build();
         final var saved = entity.toBuilder().id(id).build();
 
         // when
@@ -115,6 +114,7 @@ class CategoryServiceImpTest {
         when(repository.findById(dto.getId())).thenReturn(Optional.ofNullable(entity));
 
         CategoryDto returnedDto = service.update(dto);
+        assertEquals(returnedDto, dto);
 
         // then
         verify(repository, times(1)).findById(dto.getId());
@@ -122,7 +122,7 @@ class CategoryServiceImpTest {
         verify(repository, times(1)).save(entity);
         verify(mapper, times(1)).update(dto, entity);
 
-        assertEquals(returnedDto, dto);
+
     }
     @Test
     void testUpdateNonExisting() {

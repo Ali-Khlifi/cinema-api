@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 @Entity
 @ToString
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Film {

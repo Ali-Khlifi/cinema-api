@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class FilmDto {
     private Long id;
     private String titre;

@@ -77,8 +77,9 @@ public class FilmServiceImpl implements FilmService {
                 .orElseThrow(() -> new NotFoundException(NO_DATA));
 
         filmMapper.update(dto, film);
+        filmRepository.save(film);
 
-        return filmMapper.toDto(filmRepository.save(film));
+        return filmMapper.toDto(film);
     }
 
     @Override

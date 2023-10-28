@@ -10,5 +10,6 @@ import java.time.LocalDateTime;
 public class SeanceDto {
     private Long id;
     private LocalDateTime heureDebut;
+    private LocalDateTime heureFin;
 
 }

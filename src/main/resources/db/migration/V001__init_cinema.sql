@@ -33,9 +33,6 @@ CREATE SEQUENCE public.ville_id_seq
 CREATE TABLE public.cinema (
                                id bigint NOT NULL PRIMARY KEY,
                                name character varying(255),
-                               longitude double precision,
-                               latitude double precision,
-                               altitude double precision,
                                adresse character varying(255),
                                nombre_salles int,
                                ville_id bigint
@@ -51,7 +48,8 @@ CREATE SEQUENCE public.cinema_id_seq
 -- Table: seance
 CREATE TABLE public.seance (
                                id bigint NOT NULL PRIMARY KEY,
-                               heure_debut timestamp without time zone
+                               heure_debut timestamp without time zone,
+                               heure_fin timestamp without time zone
 );
 
 CREATE SEQUENCE public.seance_id_seq
@@ -116,9 +114,6 @@ CREATE SEQUENCE public.film_projection_id_seq
 CREATE TABLE public.place (
                               id bigint NOT NULL PRIMARY KEY,
                               numero int,
-                              longitude double precision,
-                              latitude double precision,
-                              altitude double precision,
                               salle_id bigint
 );
 

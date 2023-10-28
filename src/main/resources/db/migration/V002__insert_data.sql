@@ -18,22 +18,35 @@ VALUES
     ('Toulouse', 43.6043, 1.4437, 146);
 
 -- Insert data into cinema
-INSERT INTO public.cinema (name, longitude, latitude, altitude, nombre_salles, ville_id)
+INSERT INTO public.cinema (name, adresse, nombre_salles, ville_id)
 VALUES
-    ('Cinema Parisien', 48.8566, 2.3522, 35, 5, 1),
-    ('Cinema Lyonnais', 45.7600, 4.8400, 173, 3, 2),
-    ('Cinema Marseillais', 43.2965, 5.3698, 28, 4, 3),
-    ('Cinema Toulousain', 43.6043, 1.4437, 146, 6, 4);
+    ('Cinema Parisien', 'Paris', 5, 1),
+    ('Cinema Lyonnais', 'Lyon', 3, 2),
+    ('Cinema Marseillais', 'Marseille', 4, 3),
+    ('Cinema Toulousain', 'Toulouse', 6, 4),
+    ('UGC Cité Internationale', 'Cité Internationale - 80, quai Charles de Gaulle 69006 LYON', 14, 2 ),
+    ('UGC Cité Confluence', 'Pôle de loisirs de commerces - 112, cours Charlemagne 69002 LYON', 27, 2 ),
+    ('UGC Astoria', '31, cours Vitton 69006 LYON', 5, 2 ),
+    ('UGC Cité Part-dieu', 'Centre Commercial La Part-Dieu - Niveau 3 - Les Tables 69431 LYON', 38, 2 );
 
 -- Insert data into Salle
 INSERT INTO public.salle (name, nombre_places, cinema_id)
 VALUES
-    ('Salle A', 120, 1),
-    ('Salle B', 100, 2),
-    ('Salle C', 90, 1),
-    ('Salle D', 80, 2),
-    ('Salle E', 75, 3),
-    ('Salle F', 70, 4);
+    ('Salle 1', 120, 1),
+    ('Salle 2', 100, 2),
+    ('Salle 2', 90, 1),
+    ('Salle 3', 80, 2),
+    ('Salle 4', 75, 3),
+    ('Salle 5', 70, 4),
+    ('Salle 1', 120, 3),
+    ('Salle 2', 100, 3),
+    ('Salle 3', 90, 4),
+    ('Salle 4', 80, 4),
+    ('Salle 1', 75, 5),
+    ('Salle 2', 70, 5),
+    ('Salle 3', 70, 5),
+    ('Salle 1', 70, 6),
+    ('Salle 2', 70, 6);
 
 -- Insert data into Seance
 INSERT INTO public.seance (heure_debut)
@@ -60,14 +73,14 @@ VALUES
     ('2023-07-01', 9.0, 4, 4, 4);
 
 -- Insert data into Place
-INSERT INTO public.place (numero, longitude, latitude, altitude, salle_id)
+INSERT INTO public.place (numero, salle_id)
 VALUES
-    (1, 0, 0, 0, 1),
-    (2, 0, 0, 0, 1),
-    (3, 0, 0, 0, 2),
-    (4, 0, 0, 0, 2),
-    (5, 0, 0, 0, 3),
-    (6, 0, 0, 0, 3);
+    (1, 1),
+    (2, 1),
+    (3, 2),
+    (4, 2),
+    (5, 3),
+    (6, 3);
 
 -- Insert data into Ticket
 INSERT INTO public.ticket (nom_client, prix, code_payement, reservee, place_id, film_projection_id)

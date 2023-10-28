@@ -8,7 +8,5 @@ import lombok.Data;
 public class PlaceDto {
     private Long id;
     private int numero;
-    private double longitude, latitude, altitude;
-
     private Long salleId;
 }

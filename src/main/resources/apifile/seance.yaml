@@ -129,6 +129,7 @@ components:
       type: object
       required:
         - heureDebut
+        - heureFin
       properties:
         id:
           type: integer
@@ -136,7 +137,9 @@ components:
         heureDebut:
           type: string
           format: date-time
-
+        heureFin:
+          type: string
+          format: date-time
     Error:
       description: 'format message for error return HTTP'
       type: object

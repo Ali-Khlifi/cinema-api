@@ -73,14 +73,14 @@ VALUES
     ('2023-11-11', 8, 3);
 
 -- Insert data into Seance
-INSERT INTO public.seance (heure_debut, heure_fin, film_projection_id)
+INSERT INTO public.seance (heure_debut, heure_fin, prix, film_projection_id)
 VALUES
-    ('2023-05-01 14:00:00', '2023-05-01 15:00:00',1),
-    ('2023-05-01 16:30:00', '2023-05-01 17:00:00',2),
-    ('2023-05-01 19:00:00', '2023-05-01 20:00:00',3),
-    ('2023-05-01 21:00:00', '2023-05-01 22:00:00',4),
-    ('2023-11-11 18:00:00', '2023-11-11 19:00:00',5),
-    ('2023-11-12 15:00:00', '2023-11-12 17:00:00',3);
+    ('2023-05-01 14:00:00', '2023-05-01 15:00:00', 14.0, 1),
+    ('2023-05-01 16:30:00', '2023-05-01 17:00:00',9.0, 2),
+    ('2023-05-01 19:00:00', '2023-05-01 20:00:00',10.0, 3),
+    ('2023-05-01 21:00:00', '2023-05-01 22:00:00',12.0, 4),
+    ('2023-11-11 18:00:00', '2023-11-11 19:00:00',6.0, 5),
+    ('2023-11-12 15:00:00', '2023-11-12 17:00:00',15.0, 3);
 
 
 -- Insert data into Place
@@ -99,17 +99,17 @@ VALUES
 
 
 -- Insert data into Ticket
-INSERT INTO public.ticket (nom_client, prix, code_payement, reservee, place_id, film_projection_id)
+INSERT INTO public.ticket (nom_client, code_payement, reservee, place_id, film_projection_id)
 VALUES
-    ('Client A', 12.0, 12345, true, 1, 1),
-    ('Client B', 10.0, 67890, true, 2, 2),
-    ('Client C', 14.0, 11121, true, 3, 3),
-    ('Client D', 9.0, 13141, true, 4, 4),
-    ('Ali', 7.0, 13142, false, 5, 5),
-    ('Bilel', 8.0, 10000, false, 6, 6),
-    ('Nidhal', 15.0, 13144, false,3, 7),
-    ('Hamed', 4.0, 13133, false, 5, 8),
-    ('Hlel', 6.0, 13136, false, 8, 8);
+    ('Client A', 12345, true, 1, 1),
+    ('Client B', 67890, true, 2, 2),
+    ('Client C', 11121, true, 3, 3),
+    ('Client D', 13141, true, 4, 4),
+    ('Ali', 13142, false, 5, 5),
+    ('Bilel', 10000, false, 6, 6),
+    ('Nidhal', 13144, false,3, 7),
+    ('Hamed', 13133, false, 5, 8),
+    ('Hlel', 13136, false, 8, 8);
 
 
 

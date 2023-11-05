@@ -182,7 +182,6 @@ components:
       type: object
       required:
           - nomClient
-          - prix
           - codePayement
           - reservee
           - filmProjectionId
@@ -193,9 +192,6 @@ components:
           format: int64
         nomClient:
           type: string
-        prix:
-          type: number
-          format: double
         codePayement:
           type: integer
         reservee:

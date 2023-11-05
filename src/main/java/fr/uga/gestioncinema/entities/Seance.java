@@ -20,7 +20,7 @@ public class Seance {
     private Date heureDebut;
     @Temporal(TemporalType.TIMESTAMP)
     private Date heureFin;
-
+    private double prix;
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private FilmProjection filmProjection;

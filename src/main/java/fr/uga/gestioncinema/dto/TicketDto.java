@@ -13,7 +13,6 @@ import lombok.Data;
 public class TicketDto {
     private Long id;
     private String nomClient;
-    private double prix;
     private int codePayement;
     private boolean reservee;
     private Long placeId;

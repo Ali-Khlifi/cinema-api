@@ -18,7 +18,6 @@ public class Ticket {
     private Long id;
     @Column(length = 75)
     private String nomClient;
-    private double prix;
     @Column(unique = false)
     private int codePayement;
     private boolean reservee;

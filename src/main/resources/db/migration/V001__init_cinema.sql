@@ -50,6 +50,7 @@ CREATE TABLE public.seance (
                                id bigint NOT NULL PRIMARY KEY,
                                heure_debut timestamp without time zone,
                                heure_fin timestamp without time zone,
+                               prix double precision,
                                film_projection_id bigint
 );
 
@@ -127,7 +128,6 @@ CREATE SEQUENCE public.place_id_seq
 CREATE TABLE public.ticket (
                                id bigint NOT NULL PRIMARY KEY,
                                nom_client character varying(75),
-                               prix double precision,
                                code_payement int,
                                reservee boolean,
                                place_id bigint,

@@ -16,8 +16,6 @@ import java.util.Date;
 public class FilmProjectionDto {
     private Long id;
     private Date dateProjection;
-    private double prix;
     private Long salleId;
     private FilmDto film;
-    private SeanceDto seance;
 }

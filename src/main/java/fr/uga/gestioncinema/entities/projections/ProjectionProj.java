@@ -10,7 +10,6 @@ import java.util.Date;
 @Projection(name = "p1", types = {FilmProjection.class})
 public interface ProjectionProj {
     public Long getId();
-    public double getPrix();
     public Date getDateProjection();
     @Value("#{target.salle}")
     public SalleProj getSalle();

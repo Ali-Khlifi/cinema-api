@@ -13,5 +13,7 @@ public class SeanceDto {
     private Long id;
     private LocalDateTime heureDebut;
     private LocalDateTime heureFin;
+    private Long filmProjectionId;
+
 
 }

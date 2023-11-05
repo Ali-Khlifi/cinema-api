@@ -130,6 +130,7 @@ components:
       required:
         - heureDebut
         - heureFin
+        - filmProjectionId
       properties:
         id:
           type: integer
@@ -140,6 +141,10 @@ components:
         heureFin:
           type: string
           format: date-time
+        filmProjectionId:
+          type: integer
+          format: int64
+
     Error:
       description: 'format message for error return HTTP'
       type: object

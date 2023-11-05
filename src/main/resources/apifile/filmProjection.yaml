@@ -159,10 +159,8 @@ components:
       type: object
       required:
           - dateProjection
-          - prix
           - film
           - salleId
-          - seance
       properties:
         id:
           type: integer
@@ -170,16 +168,11 @@ components:
         dateProjection:
           type: string
           format: date-time
-        prix:
-          type: number
-          format: double
         film:
           $ref: '#/components/schemas/FilmOpenApiModel'
         salleId:
           type: integer
           format: int64
-        seance:
-          $ref: '#/components/schemas/SeanceOpenApiModel'
 
     'FilmOpenApiModel':
       description: 'Object representing a currently accessible ressource'
@@ -213,18 +206,6 @@ components:
         categoryId:
           type: integer
           format: int64
-
-    'SeanceOpenApiModel':
-      type: object
-      required:
-        - heureDebut
-      properties:
-        id:
-          type: integer
-          format: int64
-        heureDebut:
-          type: string
-          format: date-time
 
     Error:
       description: 'format message for error return HTTP'

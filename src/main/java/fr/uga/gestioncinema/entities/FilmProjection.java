@@ -12,7 +12,6 @@ public class FilmProjection {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date dateProjection;
-    private double prix;
     @ManyToOne
     private Salle salle;
     @ManyToOne

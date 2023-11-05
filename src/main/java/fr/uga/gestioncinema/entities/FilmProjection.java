@@ -19,7 +19,9 @@ public class FilmProjection {
     private Film film;
     @OneToMany(mappedBy = "filmProjection")
     private Collection<Ticket> tickets;
-    @ManyToOne
-    private Seance seance;
+    ///@ManyToOne
+    //private Seance seance;
+    @OneToMany(mappedBy = "filmProjection")
+    private Collection<Seance> seances;
 
 }

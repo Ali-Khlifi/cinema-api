@@ -52,17 +52,6 @@ VALUES
     ('Salle 1', 70, 6),
     ('Salle 2', 70, 6);
 
--- Insert data into Seance
-INSERT INTO public.seance (heure_debut)
-VALUES
-    ('2023-05-01 14:00:00'),
-    ('2023-05-01 16:30:00'),
-    ('2023-05-01 19:00:00'),
-    ('2023-05-01 21:00:00'),
-    ('2023-11-11 18:00:00'),
-    ('2023-11-12 15:00:00');
-
-
 -- Insert data into Film
 INSERT INTO public.film (titre, duree, realisateur, description, photo, date_sortie, category_id)
 VALUES
@@ -72,16 +61,26 @@ VALUES
     ('Film Documentaire', 130, 'Anna Johnson', 'Un regard sur la nature', 'documentary.jpg', '2023-07-01', 6);
 
 -- Insert data into FilmProjection
-INSERT INTO public.film_projection (date_projection, prix, salle_id, film_id, seance_id)
+INSERT INTO public.film_projection (date_projection, salle_id, film_id)
 VALUES
-    ('2023-05-01', 12.0, 1, 1, 1),
-    ('2023-05-01', 10.0, 2, 2, 2),
-    ('2023-06-01', 14.0, 3, 3, 3),
-    ('2023-07-01', 9.0, 4, 4, 4),
-    ('2023-11-01', 9.0, 5, 1, 4),
-    ('2023-11-05', 9.0, 6, 3, 2),
-    ('2023-11-07', 9.0, 7, 1, 4),
-    ('2023-11-11', 9.0, 8, 3, 5);
+    ('2023-05-01', 1, 1),
+    ('2023-05-01', 2, 2),
+    ('2023-06-01', 3, 3),
+    ('2023-07-01', 4, 4),
+    ('2023-11-01', 5, 1),
+    ('2023-11-05', 6, 3),
+    ('2023-11-07', 7, 1),
+    ('2023-11-11', 8, 3);
+
+-- Insert data into Seance
+INSERT INTO public.seance (heure_debut, heure_fin, film_projection_id)
+VALUES
+    ('2023-05-01 14:00:00', '2023-05-01 15:00:00',1),
+    ('2023-05-01 16:30:00', '2023-05-01 17:00:00',2),
+    ('2023-05-01 19:00:00', '2023-05-01 20:00:00',3),
+    ('2023-05-01 21:00:00', '2023-05-01 22:00:00',4),
+    ('2023-11-11 18:00:00', '2023-11-11 19:00:00',5),
+    ('2023-11-12 15:00:00', '2023-11-12 17:00:00',3);
 
 
 -- Insert data into Place

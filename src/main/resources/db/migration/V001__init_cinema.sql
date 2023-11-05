@@ -49,7 +49,8 @@ CREATE SEQUENCE public.cinema_id_seq
 CREATE TABLE public.seance (
                                id bigint NOT NULL PRIMARY KEY,
                                heure_debut timestamp without time zone,
-                               heure_fin timestamp without time zone
+                               heure_fin timestamp without time zone,
+                               film_projection_id bigint
 );
 
 CREATE SEQUENCE public.seance_id_seq
@@ -97,10 +98,8 @@ CREATE SEQUENCE public.salle_id_seq
 CREATE TABLE public.film_projection (
                                        id bigint NOT NULL PRIMARY KEY,
                                        date_projection date,
-                                       prix double precision,
                                        salle_id bigint REFERENCES public.salle(id),
-                                       film_id bigint REFERENCES public.film(id),
-                                       seance_id bigint
+                                       film_id bigint REFERENCES public.film(id)
 );
 
 CREATE SEQUENCE public.film_projection_id_seq
@@ -173,7 +172,7 @@ ALTER TABLE public.film_projection ADD CONSTRAINT fk_film_projection_salle FOREI
 ALTER TABLE public.film_projection ADD CONSTRAINT fk_film_projection_film FOREIGN KEY (film_id) REFERENCES public.film(id);
 
 -- Pour la table FilmProjection et Seance
-ALTER TABLE public.film_projection ADD CONSTRAINT fk_film_projection_seance FOREIGN KEY (seance_id) REFERENCES public.seance(id);
+--ALTER TABLE public.film_projection ADD CONSTRAINT fk_film_projection_seance FOREIGN KEY (seance_id) REFERENCES public.seance(id);
 
 -- Pour la table Place et Salle
 ALTER TABLE public.place ADD CONSTRAINT fk_place_salle FOREIGN KEY (salle_id) REFERENCES public.salle(id);
@@ -183,3 +182,7 @@ ALTER TABLE public.ticket ADD CONSTRAINT fk_ticket_place FOREIGN KEY (place_id) 
 
 -- Pour la table Ticket et FilmProjection
 ALTER TABLE public.ticket ADD CONSTRAINT fk_ticket_film_projection FOREIGN KEY (film_projection_id) REFERENCES public.film_projection(id);
+
+-- Pour la table Seance et FilmProjection
+ALTER TABLE public.seance ADD CONSTRAINT fk_seance_film_projection FOREIGN KEY (film_projection_id) REFERENCES public.film_projection(id);
+

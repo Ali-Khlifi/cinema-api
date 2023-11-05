@@ -57,6 +57,12 @@ public class SeanceServiceImpl implements SeanceService {
         repository.deleteById(id);
 
     }
-
+    @Override
+    public List<SeanceDto> findByFilmProjection(Long filmProjectionId) {
+        return repository.findByFilmProjection_Id(filmProjectionId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
 }
 

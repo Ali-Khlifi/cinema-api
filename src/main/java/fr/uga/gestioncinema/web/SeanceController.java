@@ -56,7 +56,10 @@ public class SeanceController implements SeanceApi {
         service.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
+    @Override
+    public ResponseEntity<List<SeanceOpenApiModel>> findByFilmProjection (Long id){
+        return ResponseEntity.ok().body(mapper.toOpenApiModelList(service.findByFilmProjection(id)));
+    }
 }
 
 

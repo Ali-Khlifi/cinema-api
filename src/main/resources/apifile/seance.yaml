@@ -122,6 +122,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /seance/byFilmProjection:
+    get:
+      tags:
+        - Seance
+      summary: 'Seance by filmProjection'
+      operationId: findByFilmProjection
+      parameters:
+        - name: filmProjectId
+          in: query
+          description: 'Find seances by its film projection'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SeanceOpenApiModel'
 
 components:
   schemas:

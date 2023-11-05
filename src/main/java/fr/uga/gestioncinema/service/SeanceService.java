@@ -11,6 +11,7 @@ public interface SeanceService {
     SeanceDto save(@Valid SeanceDto dto);
     List<SeanceDto> fetchAll();
     SeanceDto update(@Valid SeanceDto dto);
+    List<SeanceDto>findByFilmProjection(Long filmProjectionId);
 
     void delete(Long id);
 }

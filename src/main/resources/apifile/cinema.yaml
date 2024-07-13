@@ -158,31 +158,22 @@ components:
       type: object
       required:
         - name
-        - longitude
-        - latitude
-        - altitude
         - nombreSalles
         - villeId
+        - adresse
       properties:
         id:
           type: integer
           format: int64
         name:
           type: string
-        longitude:
-          type: number
-          format: double
-        latitude:
-          type: number
-          format: double
-        altitude:
-          type: number
-          format: double
         nombreSalles:
           type: integer
         villeId:
           type: integer
           format: int64
+        adresse:
+          type: string
 
     Error:
       description: 'format message for error return HTTP'

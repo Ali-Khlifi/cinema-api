@@ -9,6 +9,6 @@ public class CinemaDto {
     private Long id;
     private String name;
     private int nombreSalles;
-
     private Long villeId;
+    private String adresse;
 }

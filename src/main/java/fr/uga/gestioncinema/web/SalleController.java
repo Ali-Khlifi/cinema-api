@@ -67,7 +67,11 @@ public class SalleController implements SalleApi {
         return ResponseEntity.ok().body(mapper.toOpenApiModelList(salles));
 
     }
-
+    @Override
+    public ResponseEntity<List<SalleOpenApiModel>> findByCinemaId(Long cinemaId) throws Exception {
+        List<SalleDto> salles = service.findByCinemaId(cinemaId);
+        return ResponseEntity.ok().body(mapper.toOpenApiModelList(salles));
+    }
 }
 
 

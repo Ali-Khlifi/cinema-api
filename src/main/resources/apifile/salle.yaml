@@ -151,6 +151,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /salles/{cinemaId}:
+    get:
+      tags:
+        - Salle
+      summary: 'Salles by cinemaId'
+      operationId: findByCinemaId
+      parameters:
+        - name: cinemaId
+          in: path
+          description: 'Find Salles by cinema id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalleOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
     'SalleOpenApiModel':

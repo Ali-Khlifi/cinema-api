@@ -13,5 +13,6 @@ import java.util.List;
 public interface SalleRepository extends JpaRepository<Salle, Long> {
 
     List<Salle> findByCinemaName (String cinemaName);
+    List<Salle> findByCinemaId (Long cinemaId);
 
 }

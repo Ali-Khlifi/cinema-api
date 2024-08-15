@@ -12,5 +12,6 @@ public interface SalleService {
     List<SalleDto> fetchAll();
     SalleDto update(@Valid SalleDto dto);
     List<SalleDto> findByCinema(CinemaDto dto);
+    List<SalleDto> findByCinemaId(Long cinemaId);
     void delete(Long id);
 }

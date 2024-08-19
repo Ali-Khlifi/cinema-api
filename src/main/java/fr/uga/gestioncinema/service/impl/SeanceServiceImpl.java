@@ -43,6 +43,13 @@ public class SeanceServiceImpl implements SeanceService {
     }
 
     @Override
+    public List<SeanceDto> fetchByFilmProjection(Long filmProjectionId) {
+        return repository.findByFilmProjectId(filmProjectionId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+    @Override
     public SeanceDto update(SeanceDto dto) {
         final var seance = repository.findById(dto.getId())
                 .orElseThrow(() -> new NotFoundException(NO_DATA));

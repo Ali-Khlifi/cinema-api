@@ -10,6 +10,7 @@ public interface SeanceService {
     SeanceDto fetchOne(Long id);
     SeanceDto save(@Valid SeanceDto dto);
     List<SeanceDto> fetchAll();
+    List<SeanceDto> fetchByFilmProjection(Long filmProjectionId);
     SeanceDto update(@Valid SeanceDto dto);
 
     void delete(Long id);

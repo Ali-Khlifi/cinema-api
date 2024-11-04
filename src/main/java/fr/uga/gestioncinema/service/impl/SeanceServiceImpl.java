@@ -44,10 +44,11 @@ public class SeanceServiceImpl implements SeanceService {
 
     @Override
     public List<SeanceDto> fetchByFilmProjection(Long filmProjectionId) {
-        return repository.findByFilmProjectionId(filmProjectionId)
+        /*return repository.findByFilmProjectionId(filmProjectionId)
                 .stream()
                 .map(mapper::toDto)
-                .toList();
+                .toList();*/
+        return null;
     }
     @Override
     public SeanceDto update(SeanceDto dto) {

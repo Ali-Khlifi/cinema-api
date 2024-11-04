@@ -12,7 +12,7 @@ import java.util.List;
 @RepositoryRestResource
 @CrossOrigin("*")
 public interface SeanceRepository extends JpaRepository<Seance, Long> {
-    @Query("SELECT s FROM Seance s JOIN FilmProjection fp ON s.id = fp.seance.id WHERE fp.id = :filmProjectionId")
-    List<Seance> findByFilmProjectionId(@Param("filmProjectionId") Long filmProjectionId);
+    /*@Query("SELECT s FROM Seance s JOIN FilmProjection fp ON s.id = fp.seance.id WHERE fp.id = :filmProjectionId")
+    List<Seance> findByFilmProjectionId(@Param("filmProjectionId") Long filmProjectionId);*/
 
 }

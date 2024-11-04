@@ -19,4 +19,7 @@ public class Seance {
     private Date heureDebut;
     @Temporal(TemporalType.TIMESTAMP)
     private Date heureFin;
+    @ManyToOne
+    @JoinColumn(name = "film_projection_id") // Nom de la colonne de clé étrangère
+    private FilmProjection filmProjection; // Référence à la projection de film associée
 }

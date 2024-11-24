@@ -15,13 +15,14 @@
     <description>Gestion-Cinema</description>
     <properties>
         <java.version>17</java.version>
+        <springdoc.version>2.0.3</springdoc.version>
         <swaggerparser.version>2.1.3</swaggerparser.version>
-        <springdoc.version>1.6.11</springdoc.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
         <lombok.mapstruct.version>0.2.0</lombok.mapstruct.version>
         <openapitools.jackson.version>0.2.3</openapitools.jackson.version>
         <openapitools.generator.version>5.1.0</openapitools.generator.version>
         <springfox.version>3.0.0</springfox.version>
+        <apifile>src/main/resources/apifile</apifile>
         <apifile>src/main/resources/apifile</apifile>
         <springpage>org.springframework.data.domain.Page</springpage>
     </properties>
@@ -83,10 +84,12 @@
             <version>${swaggerparser.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>${springdoc.version}</version>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.2.16</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
@@ -94,7 +97,7 @@
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-oas</artifactId>
+            <artifactId>springfox-boot-starter</artifactId>
             <version>${springfox.version}</version>
         </dependency>
         <dependency>
@@ -112,13 +115,72 @@
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+
+
         <!--PROD-->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
     </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.15.2</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.3.1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <resources>
             <resource>
@@ -198,6 +260,7 @@
                     <configOptions>
                         <library>spring-boot</library>
                         <interfaceOnly>true</interfaceOnly>
+                        <useSpringBoot3>true</useSpringBoot3> <!-- Assure la compatibilité Spring Boot 3 -->
                         <useTags>true</useTags>
                         <unhandledException>true</unhandledException>
                         <useBeanValidation>true</useBeanValidation>

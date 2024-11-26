@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.uga</groupId>
-    <artifactId>Cinema</artifactId>
+    <artifactId>cinemas-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Gestion-Cinema</name>
     <description>Gestion-Cinema</description>

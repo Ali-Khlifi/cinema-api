@@ -6,7 +6,7 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Copier le fichier JAR généré dans le conteneur
-COPY target/Gestion-Cinema.jar app.jar
+COPY target/gestion-cinema.jar app.jar
 
 # Exposer le port sur lequel votre application fonctionne
 EXPOSE 8081

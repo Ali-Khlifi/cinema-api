@@ -52,15 +52,15 @@ public class FilmController implements FilmApi {
     }
 
     // upload a new image for a film
-     @Override
-    public ResponseEntity<Void> uploadImage(Long id, MultipartFile file) {
-        try {
-            filmService.saveFilmWithImage(id, file);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+//     @Override
+//    public ResponseEntity<Void> uploadImage(Long id, MultipartFile file) {
+//        try {
+//            filmService.saveFilmWithImage(id, file);
+//            return ResponseEntity.ok().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
      /* @PostMapping(path = "/upload")
     public ResponseEntity<?> uploadImage(@RequestParam("id")Long id, @RequestParam("photo") MultipartFile file) {
         try {
@@ -71,11 +71,11 @@ public class FilmController implements FilmApi {
         }
       }*/
 
-    @Override
+    /*@Override
     public ResponseEntity<byte[]> readImages(Long id) throws IOException {
         byte[] image = filmService.readImages(id);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
-    }
+    }*/
     /* @GetMapping(path = "/imageFilm/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> readImages(@PathVariable(name = "id")Long id) throws IOException {
         byte[] image = filmService.readImages(id);

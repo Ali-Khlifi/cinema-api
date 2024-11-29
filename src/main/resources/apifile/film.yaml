@@ -122,16 +122,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /film/{id}/upload:
+  /films/{id}/media:
     post:
       tags:
         - Film
-      summary: 'Upload image for a film'
-      operationId: uploadImage
+      summary: 'Upload media for a film'
+      operationId: uploadMedia
       parameters:
         - name: id
           in: path
-          description: id of the film
           required: true
           schema:
             type: integer
@@ -143,13 +142,13 @@ paths:
             schema:
               type: object
               properties:
-                photo:
+                file:
                   type: string
                   format: binary
-                  description: 'The image file to upload'
+                  description: 'The media file to upload'
       responses:
         '200':
-          description: 'OK saved image successfully'
+          description: 'OK saved media successfully'
         '400':
           description: 'Bad request, incorrect or missing parameters'
           content:
@@ -157,28 +156,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /imageFilm/{id}:
     get:
       tags:
         - Film
-      summary: 'get image from a film'
-      operationId: readImages
+      summary: 'download media from a film'
+      operationId: readMedia
       parameters:
         - name: id
           in: path
-          description: 'Find image film by its id'
+          description: 'Find media film by its id'
           required: true
           schema:
             type: integer
             format: int64
       responses:
         '200':
-          description: 'OK succeeded'
+          description: 'OK succeeded to get media file'
           content:
-            application/avro:
+            application/json:
               schema:
-                type: string
-                format: byte
+                $ref: '#/components/schemas/FilmOpenApiModel'
 
         '404':
           description: 'NOT FOUND'
@@ -197,7 +194,7 @@ components:
           - duree
           - realisateur
           - description
-          - photo
+          - media
           - dateSortie
           - filmProjections
           - categoryId
@@ -212,10 +209,9 @@ components:
           format: double
         realisateur:
           type: string
-        description:
+        media:
           type: string
-        photo:
-          type: string
+          format: binary
         dateSortie:
           type: string
           format: date-time

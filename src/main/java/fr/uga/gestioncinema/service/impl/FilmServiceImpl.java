@@ -30,12 +30,13 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public byte[] readImages(Long id) throws IOException {
         Film f = filmRepository.findById(id).get();
-        String photoName = f.getPhoto();
+//        String photoName = f.getPhoto();
         // Build the file path
-        String filePath = "D:/AutoFormations/AutoFormation_2023/Gestion-Cinema/cinema-api/images/" + photoName;
+//        String filePath = "D:/AutoFormations/AutoFormation_2023/Gestion-Cinema/cinema-api/images/" + photoName;
         // Read the file from the filesystem
-        Path path = Paths.get(filePath);
-        return Files.readAllBytes(path);
+//        Path path = Paths.get(filePath);
+//        return Files.readAllBytes(path);
+        return null;
     }
     @Override
     @Transactional
@@ -45,7 +46,7 @@ public class FilmServiceImpl implements FilmService {
             String fileName = imageFile.getOriginalFilename();
             Path path = Paths.get("D:/AutoFormations/AutoFormation_2023/Gestion-Cinema/cinema-api/images/" + fileName);
             Files.write(path, imageFile.getBytes());
-            film.setPhoto(fileName);
+//            film.setPhoto(fileName);
             filmRepository.save(film);
         } catch (Exception e) {
             e.printStackTrace();

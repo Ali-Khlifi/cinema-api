@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,6 +50,19 @@ public class FilmController implements FilmApi {
     @Override
     public ResponseEntity<List<FilmOpenApiModel>> findAll() {
         return ResponseEntity.ok().body(filmMapper.toOpenApiModelList(filmService.fetchAll()));
+    }
+    // upload media for a film
+
+    @Override
+    public ResponseEntity<Void> uploadMedia (Long idFilm, MultipartFile file) {
+        try {
+            filmService.saveMedia(idFilm, file);
+            return ResponseEntity.ok().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     // upload a new image for a film

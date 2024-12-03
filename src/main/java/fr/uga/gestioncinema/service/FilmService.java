@@ -20,4 +20,5 @@ public interface FilmService {
     void delete(Long id);
 
 
+    void saveMedia(Long idFilm, MultipartFile file);
 }

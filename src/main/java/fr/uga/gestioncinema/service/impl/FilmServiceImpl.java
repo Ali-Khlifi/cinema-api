@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static fr.uga.gestioncinema.utils.StringUtils.Exceptions.NO_DATA;
 
@@ -50,6 +51,21 @@ public class FilmServiceImpl implements FilmService {
             filmRepository.save(film);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    @Override
+    public void saveMedia(Long idFilm, MultipartFile file) {
+        try {
+            Film film = filmRepository.findById(idFilm)
+                    .orElseThrow(() -> new NoSuchElementException("Film with ID " + idFilm + " not found"));
+            if (file.isEmpty()) {
+                throw new IllegalArgumentException("Uploaded file is empty");
+            }
+
+            film.setMedia(file.getBytes());
+            filmRepository.save(film);
+        } catch(Exception e) {
+            e.getMessage();
         }
     }
 

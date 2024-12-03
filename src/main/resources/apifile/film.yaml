@@ -151,10 +151,6 @@ paths:
           description: 'OK saved media successfully'
         '400':
           description: 'Bad request, incorrect or missing parameters'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
 
     get:
       tags:

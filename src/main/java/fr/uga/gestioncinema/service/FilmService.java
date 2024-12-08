@@ -18,7 +18,5 @@ public interface FilmService {
     FilmDto update(@Valid FilmDto dto);
 
     void delete(Long id);
-
-
     void saveMedia(Long idFilm, MultipartFile file);
 }

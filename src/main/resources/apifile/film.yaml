@@ -151,11 +151,10 @@ paths:
           description: 'OK saved media successfully'
         '400':
           description: 'Bad request, incorrect or missing parameters'
-
     get:
       tags:
         - Film
-      summary: 'download media from a film'
+      summary: 'Download media from a film'
       operationId: readMedia
       parameters:
         - name: id
@@ -169,10 +168,10 @@ paths:
         '200':
           description: 'OK succeeded to get media file'
           content:
-            application/json:
+            application/octet-stream:
               schema:
-                $ref: '#/components/schemas/FilmOpenApiModel'
-
+                type: string
+                format: binary
         '404':
           description: 'NOT FOUND'
           content:

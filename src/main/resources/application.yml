@@ -6,7 +6,7 @@ logging:
 # Database configuration (PostgreSQL)
 spring:
  datasource:
-  url: jdbc:postgresql://db-cinemas-app:5432/db_cinema
+  url: jdbc:postgresql://localhost:5432/db_cinema
   username: postgres
   password: admin
   driver-class-name: org.postgresql.Driver

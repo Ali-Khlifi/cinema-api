@@ -20,6 +20,7 @@ public class Film {
     private String description;
     private Date dateSortie;
     @Lob
+    @Column(name = "media", nullable = true)
     private byte [] media;
     @OneToMany(mappedBy = "film")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // pour bloquer l'affichage des projection (en lecture)// lors de la consultation des films

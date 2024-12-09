@@ -1,5 +1,6 @@
 package fr.uga.gestioncinema.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,10 +8,10 @@ import lombok.*;
 import java.util.Collection;
 import java.util.Date;
 @Entity
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class Film {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +25,9 @@ public class Film {
     private byte [] media;
     @OneToMany(mappedBy = "film")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // pour bloquer l'affichage des projection (en lecture)// lors de la consultation des films
+    @JsonIgnore
     private Collection<FilmProjection> filmProjections;
     @ManyToOne // id_categorie est une clé étrangère dans films
+    @JsonIgnore
     private Category category;
 }

@@ -62,10 +62,12 @@ public class FilmServiceImpl implements FilmService {
                 throw new IllegalArgumentException("Uploaded file is empty");
             }
 
-            film.setMedia(file.getBytes());
+            byte [] fileBytes = file.getBytes();
+            System.out.println("File size: " + fileBytes.length + " bytes");
+            film.setMedia(fileBytes);
             filmRepository.save(film);
         } catch(Exception e) {
-            e.getMessage();
+            e.printStackTrace();
         }
     }
 

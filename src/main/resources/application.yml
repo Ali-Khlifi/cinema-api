@@ -25,3 +25,14 @@ spring:
   baseline-on-migrate: false
   locations: classpath:db/migration
   create-schemas: true
+
+ servlet:
+  multipart:
+   max-file-size: 10MB
+   max-request-size: 10MB
+ logging:
+  level:
+   org.hibernate.SQL: debug
+   org.hibernate.type.descriptor.sql.BasicBinder: trace
+   org.springframework: error
+

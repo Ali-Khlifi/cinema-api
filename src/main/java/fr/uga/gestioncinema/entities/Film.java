@@ -20,14 +20,13 @@ public class Film {
     private String realisateur;
     private String description;
     private Date dateSortie;
-    @Lob
-    @Column(name = "media", nullable = true)
+    @Column(name = "media", columnDefinition = "bytea", nullable = true)
     private byte [] media;
     @OneToMany(mappedBy = "film")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // pour bloquer l'affichage des projection (en lecture)// lors de la consultation des films
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JsonIgnore
     private Collection<FilmProjection> filmProjections;
-    @ManyToOne // id_categorie est une clé étrangère dans films
+    @ManyToOne
     @JsonIgnore
     private Category category;
 }

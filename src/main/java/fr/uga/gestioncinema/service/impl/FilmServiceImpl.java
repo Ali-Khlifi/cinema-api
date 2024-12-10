@@ -54,6 +54,7 @@ public class FilmServiceImpl implements FilmService {
         }
     }
     @Override
+    @Transactional
     public void saveMedia(Long idFilm, MultipartFile file) {
         try {
             Film film = filmRepository.findById(idFilm)
@@ -61,10 +62,7 @@ public class FilmServiceImpl implements FilmService {
             if (file.isEmpty()) {
                 throw new IllegalArgumentException("Uploaded file is empty");
             }
-
-            byte [] fileBytes = file.getBytes();
-            System.out.println("File size: " + fileBytes.length + " bytes");
-            film.setMedia(fileBytes);
+            film.setMedia(file.getBytes());
             filmRepository.save(film);
         } catch(Exception e) {
             e.printStackTrace();

@@ -6,7 +6,9 @@ import fr.uga.gestioncinema.service.FilmService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.FilmApi;
 import org.openapitools.model.FilmOpenApiModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,8 +53,8 @@ public class FilmController implements FilmApi {
     public ResponseEntity<List<FilmOpenApiModel>> findAll() {
         return ResponseEntity.ok().body(filmMapper.toOpenApiModelList(filmService.fetchAll()));
     }
-    // upload media for a film
 
+    // upload media for a film
     @Override
     public ResponseEntity<Void> uploadMedia (Long idFilm, MultipartFile file) {
         try {
@@ -64,6 +66,38 @@ public class FilmController implements FilmApi {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    // read media film
+    @Override
+    public ResponseEntity<byte []> readMedia (Long id) {
+        try {
+            byte [] media = filmService.getMediaFilm(id);
+            if(media == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            String mediaType = filmService.determineMediaType(media);
+            MediaType contentType = mediaType != null ?
+                    MediaType.parseMediaType(mediaType) :
+                    MediaType.APPLICATION_OCTET_STREAM;
+
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(contentType);
+            headers.setContentLength(media.length);
+
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(media);
+
+        }catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @Override
     public ResponseEntity<Void> delete(Long id) throws Exception {
         filmService.delete(id);

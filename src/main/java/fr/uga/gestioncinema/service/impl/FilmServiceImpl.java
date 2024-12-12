@@ -103,6 +103,37 @@ public class FilmServiceImpl implements FilmService {
         filmRepository.deleteById(id);
 
     }
+    @Override
+    public byte[] getMediaFilm(Long id) {
+        Film film = filmRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Film with ID " + id + " not found"));
+        return film.getMedia();
+    }
+    @Override
+    public String determineMediaType(byte[] media) {
+        try {
+
+            if (media.length >= 4) {
+                String header = String.format("%02X%02X%02X%02X", media[0], media[1], media[2], media[3]);
+                switch (header) {
+                    case "FFD8FFDB": // JPEG
+                    case "FFD8FFE0": // JPEG
+                    case "FFD8FFE1": // JPEG
+                        return "image/jpeg";
+                    case "89504E47": // PNG
+                        return "image/png";
+                    default:
+                        return null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
 
 }
 

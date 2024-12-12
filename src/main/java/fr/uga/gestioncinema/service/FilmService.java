@@ -19,4 +19,8 @@ public interface FilmService {
 
     void delete(Long id);
     void saveMedia(Long idFilm, MultipartFile file);
+
+    byte[] getMediaFilm(Long id);
+
+    String determineMediaType(byte[] media);
 }

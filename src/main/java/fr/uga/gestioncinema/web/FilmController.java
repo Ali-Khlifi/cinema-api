@@ -1,10 +1,12 @@
 package fr.uga.gestioncinema.web;
 
 import fr.uga.gestioncinema.mappers.FilmMapper;
+import fr.uga.gestioncinema.repositories.FilmRepository;
 import fr.uga.gestioncinema.service.FilmService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.FilmApi;
 import org.openapitools.model.FilmOpenApiModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class FilmController implements FilmApi {
 
     private final FilmService filmService;
     private final FilmMapper filmMapper;
+    private final FilmRepository filmRepository;
 
     @Override
     public ResponseEntity<FilmOpenApiModel> create(FilmOpenApiModel model) {
@@ -51,36 +54,49 @@ public class FilmController implements FilmApi {
         return ResponseEntity.ok().body(filmMapper.toOpenApiModelList(filmService.fetchAll()));
     }
 
-    // upload a new image for a film
-     @Override
-    public ResponseEntity<Void> uploadImage(Long id, MultipartFile file) {
-        try {
-            filmService.saveFilmWithImage(id, file);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-     /* @PostMapping(path = "/upload")
-    public ResponseEntity<?> uploadImage(@RequestParam("id")Long id, @RequestParam("photo") MultipartFile file) {
-        try {
-            filmService.saveFilmWithImage(id, file);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-      }*/
-
+    // upload media for a film
     @Override
-    public ResponseEntity<byte[]> readImages(Long id) throws IOException {
-        byte[] image = filmService.readImages(id);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+    public ResponseEntity<Void> uploadMedia (Long idFilm, MultipartFile file) {
+        try {
+            filmService.saveMedia(idFilm, file);
+            return ResponseEntity.ok().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
-    /* @GetMapping(path = "/imageFilm/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> readImages(@PathVariable(name = "id")Long id) throws IOException {
-        byte[] image = filmService.readImages(id);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
-    }*/
+
+    // read media film
+    @Override
+    public ResponseEntity<byte []> readMedia (Long id) {
+        try {
+            byte [] media = filmService.getMediaFilm(id);
+            if(media == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            String mediaType = filmService.determineMediaType(media);
+            MediaType contentType = mediaType != null ?
+                    MediaType.parseMediaType(mediaType) :
+                    MediaType.APPLICATION_OCTET_STREAM;
+
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(contentType);
+            headers.setContentLength(media.length);
+
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(media);
+
+        }catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @Override
     public ResponseEntity<Void> delete(Long id) throws Exception {

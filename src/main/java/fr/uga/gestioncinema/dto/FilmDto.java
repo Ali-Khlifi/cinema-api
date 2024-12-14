@@ -14,7 +14,7 @@ public class FilmDto {
     private Double duree;
     private String realisateur;
     private String description;
-    private String photo;
+    private byte [] media;
     private LocalDateTime dateSortie;
     private Long categoryId;
     private Collection<FilmProjectionDto> filmProjections;

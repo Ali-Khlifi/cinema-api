@@ -1,21 +1,18 @@
 package fr.uga.gestioncinema.service.impl;
 
-import fr.uga.gestioncinema.repositories.FilmRepository;
 import fr.uga.gestioncinema.dto.FilmDto;
 import fr.uga.gestioncinema.entities.Film;
 import fr.uga.gestioncinema.exceptions.NotFoundException;
 import fr.uga.gestioncinema.mappers.FilmMapper;
+import fr.uga.gestioncinema.repositories.FilmRepository;
 import fr.uga.gestioncinema.service.FilmService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static fr.uga.gestioncinema.utils.StringUtils.Exceptions.NO_DATA;
 
@@ -26,28 +23,18 @@ public class FilmServiceImpl implements FilmService {
     private final FilmRepository filmRepository;
     private final FilmMapper filmMapper;
 
-
-    @Override
-    public byte[] readImages(Long id) throws IOException {
-        Film f = filmRepository.findById(id).get();
-        String photoName = f.getPhoto();
-        // Build the file path
-        String filePath = "D:/AutoFormations/AutoFormation_2023/Gestion-Cinema/cinema-api/images/" + photoName;
-        // Read the file from the filesystem
-        Path path = Paths.get(filePath);
-        return Files.readAllBytes(path);
-    }
     @Override
     @Transactional
-    public void saveFilmWithImage(Long id, MultipartFile imageFile) {
+    public void saveMedia(Long idFilm, MultipartFile file) {
         try {
-            Film film = filmRepository.findById(id).get();
-            String fileName = imageFile.getOriginalFilename();
-            Path path = Paths.get("D:/AutoFormations/AutoFormation_2023/Gestion-Cinema/cinema-api/images/" + fileName);
-            Files.write(path, imageFile.getBytes());
-            film.setPhoto(fileName);
+            Film film = filmRepository.findById(idFilm)
+                    .orElseThrow(() -> new NoSuchElementException("Film with ID " + idFilm + " not found"));
+            if (file.isEmpty()) {
+                throw new IllegalArgumentException("Uploaded file is empty");
+            }
+            film.setMedia(file.getBytes());
             filmRepository.save(film);
-        } catch (Exception e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -86,6 +73,33 @@ public class FilmServiceImpl implements FilmService {
         filmRepository.deleteById(id);
 
     }
+    @Override
+    public byte[] getMediaFilm(Long id) {
+        Film film = filmRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Film with ID " + id + " not found"));
+        return film.getMedia();
+    }
+    @Override
+    public String determineMediaType(byte[] media) {
+        try {
 
+            if (media.length >= 4) {
+                String header = String.format("%02X%02X%02X%02X", media[0], media[1], media[2], media[3]);
+                switch (header) {
+                    case "FFD8FFDB": // JPEG
+                    case "FFD8FFE0": // JPEG
+                    case "FFD8FFE1": // JPEG
+                        return "image/jpeg";
+                    case "89504E47": // PNG
+                        return "image/png";
+                    default:
+                        return null;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 

@@ -6,7 +6,7 @@ logging:
 # Database configuration (PostgreSQL)
 spring:
  datasource:
-  url: jdbc:postgresql://postgres:5432/db_cinema
+  url: jdbc:postgresql://localhost:5432/db_cinema
   username: postgres
   password: admin
   driver-class-name: org.postgresql.Driver
@@ -25,3 +25,14 @@ spring:
   baseline-on-migrate: false
   locations: classpath:db/migration
   create-schemas: true
+
+ servlet:
+  multipart:
+   max-file-size: 10MB
+   max-request-size: 10MB
+ logging:
+  level:
+   org.hibernate.SQL: debug
+   org.hibernate.type.descriptor.sql.BasicBinder: trace
+   org.springframework: error
+

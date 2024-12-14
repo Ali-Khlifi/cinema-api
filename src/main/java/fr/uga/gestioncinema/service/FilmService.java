@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface FilmService {
-    byte [] readImages(Long id) throws IOException;
-    void saveFilmWithImage(Long id, MultipartFile imageFile);
 
     FilmDto fetchOne(Long id);
 
@@ -18,6 +16,9 @@ public interface FilmService {
     FilmDto update(@Valid FilmDto dto);
 
     void delete(Long id);
+    void saveMedia(Long idFilm, MultipartFile file);
 
+    byte[] getMediaFilm(Long id);
 
+    String determineMediaType(byte[] media);
 }

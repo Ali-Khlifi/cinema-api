@@ -3,8 +3,19 @@ logging:
  level:
   org.hibernate.tool.hbm2ddl: debug
 
-# Database configuration (PostgreSQL)
 spring:
+ server:
+  port: 8082
+ # security and keycloak integration
+ security:
+  oauth2:
+   resourceserver:
+    jwt:
+     issuer-uri: http://localhost:8088/realms/cinemas-app
+     jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+
+ # Database configuration (PostgreSQL)
  datasource:
   url: jdbc:postgresql://localhost:5432/db_cinema
   username: postgres

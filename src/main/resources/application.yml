@@ -13,9 +13,21 @@ spring:
     jwt:
      issuer-uri: http://localhost:8088/realms/cinemas-app
      jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+   client:
+    registration:
+     keycloak:
+      client-name: keycloak
+      client-id: cinemas-app
+      scope: openid,profile,email,offline_access
+      authorization-grant-type: authorization_code
+      redirect-uri: http://localhost:8082/login/oauth2/code/cinemas-app
+    provider:
+     keycloak:
+      issuer-uri: http://localhost:8088/realms/cinemas-app
+      user-name-attribute: preferred_username
 
 
- # Database configuration (PostgreSQL)
+ # Database configuration (PostgresSQL)
  datasource:
   url: jdbc:postgresql://localhost:5432/db_cinema
   username: postgres

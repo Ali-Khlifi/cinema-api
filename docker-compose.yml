@@ -3,20 +3,16 @@ version: '3.8'
 services:
 #  keycloak service
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.1.0
     container_name: keycloak
     environment:
-      DB_VENDOR: postgres
-      DB_ADDR: db-keycloak
-      DB_DATABASE: db_keycloak
-      DB_USER: keycloak
-      DB_PASSWORD: password
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "8088:8080"
     depends_on:
       - db-keycloak
+    command: start-dev
 
 # Database for Keycloak
   db-keycloak:
@@ -31,6 +27,21 @@ services:
     volumes:
       - keycloak-data:/var/lib/postgresql/data
 
+
+  # Database for API cinemas-app
+  db:
+    image: postgres:15
+    container_name: db-cinemas-app
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: db_cinema
+    volumes:
+      - cinemas-data:/var/lib/postgresql/data
+
+
 # API service
   cinemas-app:
     build:
@@ -44,22 +55,11 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
     depends_on:
-      - db-cinemas-app
+      - db
       - keycloak
 
-# Database for API cinemas-app
-  db:
-    image: postgres:15
-    container_name: db-cinemas-app
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: db_cinema
-    volumes:
-      - cinemas-data:/var/lib/postgresql/data
-
 volumes:
-  postgres-data:
+  cinemas-data:
   keycloak-data:
+
+

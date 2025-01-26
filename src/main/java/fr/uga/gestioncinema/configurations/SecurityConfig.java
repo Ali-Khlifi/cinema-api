@@ -1,44 +1,46 @@
 package fr.uga.gestioncinema.configurations;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
+/**
+ * SecurityConfig class configures security settings for the application,
+ * enabling security filters and setting up OAuth2 login and logout behavior.
+ */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-
-    // a customer converter for jwt instead default one
-    private final JwtAuthConverter jwtAuthConverter;
-
+    /**
+     * Configures the security filter chain for handling HTTP requests, OAuth2 login, and logout.
+     *
+     * @param http HttpSecurity object to define web-based security at the HTTP level
+     * @return SecurityFilterChain for filtering and securing HTTP requests
+     * @throws Exception in case of an error during configuration
+     */
     @Bean
-    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                    .disable()
-                .authorizeHttpRequests()
-                .anyRequest()
-                .authenticated();
-
-        http
-                .oauth2ResourceServer()
-                    .jwt()
-                            .jwtAuthenticationConverter(jwtAuthConverter);
-
-        http
-                .sessionManagement()
-                .sessionCreationPolicy(STATELESS);
+                // Configures authorization rules for different endpoints
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/").permitAll() // Allows public access to the root URL
+                        .anyRequest().authenticated() // Requires authentication for any other request
+                )
+                // Configures OAuth2 login settings
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/oauth2/authorization/keycloak") // Sets custom login page for OAuth2 with Keycloak
+                        .defaultSuccessUrl("/", true) // Redirects to "/" after successful login
+                )
+                // Configures logout settings
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/") // Redirects to the root URL on successful logout
+                        .invalidateHttpSession(true) // Invalidates session to clear session data
+                        .clearAuthentication(true) // Clears authentication details
+                        .deleteCookies("JSESSIONID") // Deletes the session cookie
+                );
 
         return http.build();
-
     }
 }
-

@@ -145,16 +145,12 @@
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
         </dependency>
-
-
-
         <!--PROD-->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -167,13 +163,8 @@
         </dependency>
         <!-- security part -->
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <version>3.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -183,6 +174,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
+        <!-- security part -->
     </dependencies>
     <dependencyManagement>
         <dependencies>

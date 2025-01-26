@@ -7,7 +7,6 @@ import org.openapitools.api.VilleApi;
 import org.openapitools.model.VilleOpenApiModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,7 +32,6 @@ public class VilleController implements VilleApi {
         return ResponseEntity.ok().body(mapper.toOpenApiModel(service.fetchOne(id)));
     }
     @Override
-    @PreAuthorize("hasRole('client_user')")
     public ResponseEntity<List<VilleOpenApiModel>> findAll() throws Exception {
         return ResponseEntity.ok().body(mapper.toOpenApiModelList(service.fetchAll()));
     }

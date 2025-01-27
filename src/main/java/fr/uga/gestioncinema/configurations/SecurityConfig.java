@@ -35,8 +35,7 @@ public class SecurityConfig {
                 )
                 // Configures logout settings
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/") // Redirects to the root URL on successful logout
-                        .invalidateHttpSession(true) // Invalidates session to clear session data
+                        .logoutSuccessUrl("/").permitAll() // Redirects to the root URL on successful logout
                         .clearAuthentication(true) // Clears authentication details
                         .deleteCookies("JSESSIONID") // Deletes the session cookie
                 );

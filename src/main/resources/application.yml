@@ -23,6 +23,10 @@ spring:
       keycloak:
        issuer-uri: http://localhost:8088/realms/cinemas-app
        user-name-attribute: preferred_username
+    resourceserver:
+     jwt:
+      issuer-uri: http://localhost:8088/realms/cinemas-app
+      set-uri: http://localhost:8088/realms/cinemas-app/protocol/openid-connect/certs
 
 
  # Database configuration (PostgresSQL)

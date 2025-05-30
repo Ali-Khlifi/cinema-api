@@ -23,26 +23,11 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: db_keycloak
     ports:
-      - "5433:5432" # Port différent pour éviter un conflit
+      - "5433:5432" # new port
     volumes:
       - keycloak-data:/var/lib/postgresql/data
 
-
-  # Database for API cinemas-app
-  db:
-    image: postgres:15
-    container_name: db-cinemas-app
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: db_cinema
-    volumes:
-      - cinemas-data:/var/lib/postgresql/data
-
-
-# API service
+  # API service
   cinemas-app:
     build:
       context: .
@@ -58,8 +43,65 @@ services:
       - db
       - keycloak
 
+  # Database for API cinemas-app
+  db:
+    image: postgres:15
+    container_name: db-cinemas-app
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: db_cinema
+    volumes:
+      - cinemas-data:/var/lib/postgresql/data
+
+  #kong service
+  kong:
+    image: kong:3.3
+    volumes:
+      - ./kong-config/kong.yml:/etc/kong/kong.yml
+    env_file:
+      - ./kong-config/kong-env.conf
+    container_name: kong
+    ports:
+      - "8000:8000"   # Admin API
+      - "8001:8001"   # Proxy
+    environment:
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_PLUGINS: bundled,oidc
+    depends_on:
+      - db-kong
+      - keycloak
+
+  db-kong:
+    image: postgres:15
+    container_name: db-kong
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: kong
+      POSTGRES_DB: kong
+    volumes:
+      - kong-data:/var/lib/postgresql/data
+
+  # Service for init kong
+  kong-migrations:
+    image: kong:3.3
+    command: [ "kong", "migrations", "bootstrap" ]
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: db-kong
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: kong
+    depends_on:
+      - db-kong
+
 volumes:
   cinemas-data:
   keycloak-data:
+  kong-data:
 
 

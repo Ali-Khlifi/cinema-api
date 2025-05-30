@@ -1,0 +1,13 @@
+_format_version: "3.0"
+services:
+  - name: cinemas-app
+    url: http://cinemas-app:8082
+    routes:
+      - name: cinema-route
+        paths: ["/api"]
+    plugins:
+      - name: oidc
+        config:
+          client_id: cinemas-kong-client
+          client_secret: XweVYwKWj8YB8ey1O7CBMg9dSwD0O8PM
+          discovery: http://keycloak:8088/realms/cinemas-app/.well-known/openid-configuration

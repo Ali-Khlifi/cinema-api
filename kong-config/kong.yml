@@ -5,6 +5,8 @@ services:
     routes:
       - name: cinema-route
         paths: ["/api"]
+        methods: [GET, POST, PUT, DELETE]
+        strip_path: true
     plugins:
       - name: oidc
         config:
@@ -12,3 +14,5 @@ services:
           client_secret: XweVYwKWj8YB8ey1O7CBMg9dSwD0O8PM
           discovery: http://keycloak:8080/realms/cinemas-app/.well-known/openid-configuration
           realm: cinemas-app
+          introspect_endpoint: http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/token/introspect
+          bearer_only: false

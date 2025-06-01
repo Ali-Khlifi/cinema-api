@@ -62,7 +62,8 @@ services:
 
   # Service for init kong
   kong-migrations:
-    image: kong:3.3
+    image: kong/kong-gateway:3.3.0.0-alpine
+    container_name: kong-migrations
     command: [ "kong", "migrations", "bootstrap" ]
     environment:
       KONG_DATABASE: postgres
@@ -75,9 +76,7 @@ services:
 
   #kong service
   kong:
-    build:
-      context: .
-      dockerfile: Dockerfile.kong
+    image: kong/kong-gateway:3.3.0.0-alpine
     volumes:
       - ./kong-config/kong.yml:/etc/kong/kong.yml
     env_file:
@@ -86,6 +85,7 @@ services:
     ports:
       - "8000:8000"   # Admin API
       - "8001:8001"   # Proxy
+      - "8443:8443"
     environment:
       KONG_PLUGINS: bundled,oidc
       KONG_PLUGINSERVER_oidc_QUERY_CMD: "/usr/local/bin/kong-oidc"
@@ -93,6 +93,8 @@ services:
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_PROXY_LISTEN: "0.0.0.0:8001, 0.0.0.0:8443 ssl"
+      KONG_ADMIN_LISTEN: "0.0.0.0:8000, 0.0.0.0:8444 ssl"
     depends_on:
       - db-kong
       - kong-migrations

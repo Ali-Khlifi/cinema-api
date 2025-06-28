@@ -2,18 +2,34 @@
 _format_version: "3.0"
 _transform: true
 
+consumers:
+  - username: cinemas-app-client
+    keyauth_credentials:
+      -key: ---------
+plugins:
+  - name: "correlation-id"
+    config:
+      header_name: "correlationId"
+      generator: "uuid"
+      echo_downstream: true
+  - name: "tcp-log"
+    config:
+      host: "localhost"
+      port: 5000
+
 services:
   # cinemas-api
   - name: cinemas-app
     url: http://cinemas-app:8082
     plugins:
+      - name: key-auth
       - name: oidc
         config:
           client_secret: VUNuaNrXXEhuDIxjNGPvX8izV8E14JWb
-          client_id: cinemas-kong-client
-          bearer_only: 'true'
+          client_id: kong
+          bearer_only: 'yes'
           introspection_endpoint: http://keycloak:8080/auth/realms/cinemas-app/protocol/openid-connect/token/introspect
-          discovery: http://keycloak:8080/realms/cinemas-app/.well-known/openid-configuration
+          discovery: http://keycloak:8080/auth/realms/master/.well-known/openid-configuration
       - name: cors
         config:
           origins:
@@ -43,4 +59,4 @@ services:
       - name: cinemas-route
         paths:
           - /api
-        strip_path: true
+        strip_path: false

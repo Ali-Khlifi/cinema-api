@@ -92,7 +92,7 @@ services:
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_PREFIX: ${KONG_PREFIX:-/var/run/kong}
-      KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.yml"
+      KONG_DECLARATIVE_CONFIG: "/opt/kong/declarative/kong.yml"
       KONG_LOG_LEVEL: info
       KONG_PLUGINS: bundled,oidc,key-auth,cors
       KONG_PLUGINSERVER_NAMES: oidc

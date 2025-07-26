@@ -1,5 +1,5 @@
 
-_format_version: "3.0"
+_format_version: "2.1"
 _transform: true
 
 consumers:
@@ -31,7 +31,7 @@ services:
           realm: cinemas-app
           introspection_endpoint: http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/token/introspect
           discovery: http://keycloak:8080/realms/cinemas-app/.well-known/openid-configuration
-          ssl_verify: false
+          ssl_verify: "no"
           filters: "uri=/api/*"
       - name: cors
         config:

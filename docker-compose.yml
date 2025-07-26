@@ -79,7 +79,7 @@ services:
 
   #kong service
   kong:
-    image: kong:2.8.4-alpine
+    image: revomatico/docker-kong-oidc:2.8.0-4
     container_name: kong
     user: "${KONG_USER:-kong}"
     environment:

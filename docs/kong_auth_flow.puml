@@ -1,0 +1,33 @@
+@startuml
+title Flux d'Authentification Kong/Keycloak\n**Métaphore Passeport & Visa**
+
+skinparam monochrome true
+skinparam sequence {
+  ArrowColor #000000
+  ActorBorderColor #000000
+  LifeLineBorderColor #000000
+}
+
+actor Client
+participant " Kong (Douane)" as Kong
+participant "Keycloak (Office des Visas)" as Keycloak
+participant "Spring API (Service Destination)" as Backend
+
+Client -> Kong : Requête avec JWT (Passeport)
+Kong -> Keycloak : Validation du JWT (Contrôle du passeport)
+Keycloak --> Kong : Réponse avec claims détaillés
+Kong -> Kong : Ajout du header X-Userinfo (Visa)
+note over Kong
+Pourquoi ? : L'ajout de X-Userinfo dispense
+les microservices de revalider le token
+end note
+
+
+alt Accès autorisé
+  Kong -> Backend : Route la requête enrichie
+  Backend --> Kong : Réponse métier
+  Kong --> Client : Retour des données
+else Accès refusé
+  Kong --> Client : HTTP 403 (Visa refusé)
+end
+@enduml

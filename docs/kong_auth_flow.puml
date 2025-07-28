@@ -1,6 +1,5 @@
 @startuml
-title Flux d'Authentification Kong/Keycloak\n**Métaphore Passeport & Visa**
-
+title Flux Réel d'Authentification\n**Métaphore Passeport & Visa**
 skinparam monochrome true
 skinparam sequence {
   ArrowColor #000000
@@ -8,26 +7,34 @@ skinparam sequence {
   LifeLineBorderColor #000000
 }
 
-actor Client
-participant " Kong (Douane)" as Kong
-participant "Keycloak (Office des Visas)" as Keycloak
-participant "Spring API (Service Destination)" as Backend
+actor "Client Angular" as Angular
+participant "Keycloak\n(Bureau des Passeports)" as Keycloak
+participant "Kong\n(Douane)" as Kong
+participant "Spring API\n(Pays de Destination)" as Backend
 
-Client -> Kong : Requête avec JWT (Passeport)
-Kong -> Keycloak : Validation du JWT (Contrôle du passeport)
-Keycloak --> Kong : Réponse avec claims détaillés
-Kong -> Kong : Ajout du header X-Userinfo (Visa)
+Angular -> Keycloak : 1. Rredirection vers /auth (login)
+Keycloak --> Angular : 2. Retour avec code d'authentification
+
+Angular -> Keycloak : 3. Echange code → token
+Keycloak --> Angular : 4. Jeton JWT (access_token)
+
+Angular -> Kong : 5. GET /api/films + Header Authorization (Token)
+Kong -> Keycloak : 6. Vérification du passeport\n(POST /introspect)
+Keycloak --> Kong : 7. Rapport de sécurité\n(Claims utilisateur)
+
+Kong -> Kong : 8. Apposition du visa\n(Header X-Userinfo)
 note over Kong
-Pourquoi ? : L'ajout de X-Userinfo dispense
-les microservices de revalider le token
+**Visa Kong** :
+- Basé sur les infos Keycloak
+- Contient : roles, email, sub
+- Evite les services de revalider à chaque requête
 end note
 
-
-alt Accès autorisé
-  Kong -> Backend : Route la requête enrichie
-  Backend --> Kong : Réponse métier
-  Kong --> Client : Retour des données
-else Accès refusé
-  Kong --> Client : HTTP 403 (Visa refusé)
+alt Visa valide
+  Kong -> Backend : 9. Entrée autorisée\n(Requête enrichie)
+  Backend --> Kong : 10. Données touristiques
+  Kong --> Angular : 11. Accès au pays
+else Visa refusé
+  Kong --> Angular : 12. "Entrée interdite"\n(HTTP 403)
 end
 @enduml

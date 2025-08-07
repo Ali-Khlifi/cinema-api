@@ -22,17 +22,18 @@ services:
   - name: cinemas-app
     url: http://cinemas-app:8082
     plugins:
-      - name: key-auth
+      #- name: key-auth
       - name: oidc
         config:
-          client_secret: VUNuaNrXXEhuDIxjNGPvX8izV8E14JWb
           client_id: kong
+          client_secret: VUNuaNrXXEhuDIxjNGPvX8izV8E14JWb
           bearer_only: "yes"
           realm: cinemas-app
           introspection_endpoint: http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/token/introspect
           discovery: http://keycloak:8080/realms/cinemas-app/.well-known/openid-configuration
+          introspection_endpoint_auth_method: client_secret_post
+          timeout: 300
           ssl_verify: "no"
-          filters: "uri=/api/*"
       - name: cors
         config:
           origins:
@@ -59,7 +60,6 @@ services:
           credentials: true
           max_age: 3600
     routes:
-      - name: cinemas-route
-        paths:
-          - /api
-        strip_path: false
+      - paths: ["/api"]
+        name: cinemas-route
+        strip_path: true

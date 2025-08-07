@@ -77,7 +77,7 @@ services:
     command: start-dev --import-realm
 
 
-  #kong service
+   #kong service
   kong:
     image: revomatico/docker-kong-oidc:2.8.0-4
     container_name: kong
@@ -93,7 +93,7 @@ services:
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_PREFIX: ${KONG_PREFIX:-/var/run/kong}
       KONG_DECLARATIVE_CONFIG: "/opt/kong/declarative/kong.yml"
-      KONG_LOG_LEVEL: info
+      KONG_LOG_LEVEL: debug
       KONG_PLUGINS: bundled,oidc,key-auth,cors
       KONG_PLUGINSERVER_NAMES: oidc
       KONG_ADMIN_GUI_URL: "${KONG_ADMIN_GUI_URL:-http://localhost:8002}"
@@ -132,6 +132,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db_cinema
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
+      SERVER_PORT: 8082
+      SERVER_SERVLET_CONTEXT_PATH: /api
       KEYCLOAK_URL: http://keycloak:8080
     networks:
       - kong-net

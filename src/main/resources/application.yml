@@ -28,7 +28,9 @@ spring:
   oauth2:
    resourceserver:
     jwt:
-     issuer-uri: http://keycloak:8088/realms/cinemas-app
+     issuer-uri: http://keycloak:8080/realms/cinemas-app
+     jwk-set-uri: http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/certs
+     #issuer-uri: http://localhost:8088/realms/cinemas-app
  servlet:
   multipart:
    max-file-size: 10MB
@@ -46,9 +48,9 @@ spring:
   credentials:
    secret: iAMf2UoLD0SrT4zslz7uvqJ24l1kTKiK
 
- web:
-  cors:
-   allowed-origins: "http://localhost:8080,http://localhost:4200"
+# web:
+#  cors:
+#   allowed-origins: "http://localhost:8080,http://localhost:4200"
 
  # Logging configuration
  logging:

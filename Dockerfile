@@ -9,7 +9,7 @@ WORKDIR /app
 COPY target/cinemas-app-0.0.1-SNAPSHOT.jar app.jar
 
 # Exposer le port sur lequel votre application fonctionne
-EXPOSE 8080
+EXPOSE 8082
 
 # Commande pour exécuter l'application Spring Boot
 ENTRYPOINT ["java", "-jar", "app.jar"]

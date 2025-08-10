@@ -1,20 +1,41 @@
 version: '3.8'
 
-services:
-  cinemas-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: cinemas-app
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db_cinema
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: admin
-    depends_on:
-      - db
 
+volumes:
+  kong_prefix_vol:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  kong_tmp_vol:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  cinemas-data:
+  keycloak-data:
+
+networks:
+  kong-net:
+    name: kong-net
+    driver: bridge
+
+
+services:
+  # Database for Keycloak
+  db-keycloak:
+    image: postgres:15
+    container_name: db-keycloak
+    environment:
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db_keycloak
+    ports:
+      - "5433:5432" # new port
+    volumes:
+      - keycloak-data:/var/lib/postgresql/data
+    networks:
+      - kong-net
+
+  # Database for API cinemas-app
   db:
     image: postgres:15
     container_name: db-cinemas-app
@@ -25,7 +46,99 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: db_cinema
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - cinemas-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U keycloak -d db_keycloak" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - kong-net
 
-volumes:
-  postgres-data:
+#  keycloak service
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.1.0
+    container_name: keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db-keycloak:5432/db_keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+    ports:
+      - "8088:8080"
+    depends_on:
+      - db-keycloak
+    networks:
+      - kong-net
+    command: start-dev --import-realm
+
+
+   #kong service
+  kong:
+    image: revomatico/docker-kong-oidc:2.8.0-4
+    container_name: kong
+    user: "${KONG_USER:-kong}"
+    environment:
+      KONG_DATABASE: "off"
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_PROXY_LISTEN: "${KONG_PROXY_LISTEN:-0.0.0.0:8000}"
+      KONG_ADMIN_LISTEN: "${KONG_ADMIN_LISTEN:-0.0.0.0:8001}"
+      KONG_ADMIN_GUI_LISTEN: "${KONG_ADMIN_GUI_LISTEN:-0.0.0.0:8002}"
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_PREFIX: ${KONG_PREFIX:-/var/run/kong}
+      KONG_DECLARATIVE_CONFIG: "/opt/kong/declarative/kong.yml"
+      KONG_LOG_LEVEL: debug
+      KONG_PLUGINS: bundled,oidc,key-auth,cors
+      KONG_PLUGINSERVER_NAMES: oidc
+      KONG_ADMIN_GUI_URL: "${KONG_ADMIN_GUI_URL:-http://localhost:8002}"
+      KONG_NGINX_WORKER_PROCESSES: "2"
+    networks:
+      - kong-net
+    ports:
+      - "8000:8000"  # Proxy
+      - "8443:8443"   # SSL Proxy
+      - "8001:8001"   # Admin API
+      - "8002:8002"   # Admin GUI
+    healthcheck:
+      test: [ "CMD", "kong", "health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    restart: on-failure
+    volumes:
+      - kong_prefix_vol:${KONG_PREFIX:-/var/run/kong}
+      - kong_tmp_vol:/tmp
+      - ./kong-config:/opt/kong/declarative:ro
+    depends_on:
+      - keycloak
+    security_opt:
+      - no-new-privileges
+
+  # API service
+  cinemas-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cinemas-app
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db_cinema
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SERVER_PORT: 8082
+      SERVER_SERVLET_CONTEXT_PATH: /api
+      KEYCLOAK_URL: http://keycloak:8080
+    networks:
+      - kong-net
+    depends_on:
+      - db
+      - keycloak
+
+

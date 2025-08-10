@@ -145,16 +145,12 @@
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
         </dependency>
-
-
-
         <!--PROD-->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -165,6 +161,20 @@
             <artifactId>validation-api</artifactId>
             <version>2.0.1.Final</version>
         </dependency>
+        <!-- security part -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-oauth2-client</artifactId>-->
+<!--        </dependency>-->
+        <!-- security part -->
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -185,7 +195,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
                 <includes>
                     <include>**/*.properties</include>
                 </includes>

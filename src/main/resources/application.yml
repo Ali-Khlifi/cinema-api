@@ -1,10 +1,8 @@
-# Logging configuration
-logging:
- level:
-  org.hibernate.tool.hbm2ddl: debug
 
-# Database configuration (PostgreSQL)
 spring:
+ application:
+  name: cinemas-app
+ # Database configuration (PostgresSQL)
  datasource:
   url: jdbc:postgresql://localhost:5432/db_cinema
   username: postgres
@@ -25,14 +23,44 @@ spring:
   baseline-on-migrate: false
   locations: classpath:db/migration
   create-schemas: true
-
+ # security and keycloak integration
+ security:
+  oauth2:
+   resourceserver:
+    jwt:
+     issuer-uri: http://keycloak:8080/realms/cinemas-app
+     jwk-set-uri: http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/certs
+     #issuer-uri: http://localhost:8088/realms/cinemas-app
  servlet:
   multipart:
    max-file-size: 10MB
    max-request-size: 10MB
+
+ server:
+  port: 8082
+  servlet:
+   context-path: /api
+
+ keycloak:
+  auth-server-url: http://keycloak:8080
+  realm: cinemas-app
+  resource: cinemas-app-client
+  credentials:
+   secret: iAMf2UoLD0SrT4zslz7uvqJ24l1kTKiK
+
+# cors configuration
+ web:
+  cors:
+   allowed-origins: "http://localhost:4200"
+
+ # Logging configuration
  logging:
   level:
    org.hibernate.SQL: debug
    org.hibernate.type.descriptor.sql.BasicBinder: trace
-   org.springframework: error
+   org.springframework.security: DEBUG
+   org.springframework.security.oauth2: DEBUG
+   file:
+    name: ./logs/cinemas-app.log
+    path: ./logs
 

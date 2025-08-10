@@ -48,9 +48,10 @@ spring:
   credentials:
    secret: iAMf2UoLD0SrT4zslz7uvqJ24l1kTKiK
 
-# web:
-#  cors:
-#   allowed-origins: "http://localhost:8080,http://localhost:4200"
+# cors configuration
+ web:
+  cors:
+   allowed-origins: "http://localhost:4200"
 
  # Logging configuration
  logging:

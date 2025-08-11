@@ -7,12 +7,14 @@ import org.openapitools.api.VilleApi;
 import org.openapitools.model.VilleOpenApiModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class VilleController implements VilleApi {
     private final VilleMapper mapper;
     private final VilleService service;

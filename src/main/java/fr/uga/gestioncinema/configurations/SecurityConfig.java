@@ -41,7 +41,7 @@ public class SecurityConfig {
     }
     @Bean
     public JwtDecoder jwtDecoder() {
-        // Utilisez withJwkSetUri au lieu de withIssuerLocation
+        // get public key from Keycloak
         String jwkSetUri = "http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/certs";
         return NimbusJwtDecoder.withJwkSetUri(
                 jwkSetUri
@@ -52,7 +52,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

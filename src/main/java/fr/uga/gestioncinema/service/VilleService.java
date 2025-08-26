@@ -1,6 +1,6 @@
 package fr.uga.gestioncinema.service;
 
-import fr.uga.gestioncinema.dto.CategoryDto;
+
 import fr.uga.gestioncinema.dto.VilleDto;
 
 import javax.validation.Valid;

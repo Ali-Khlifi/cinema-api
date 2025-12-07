@@ -1,17 +1,17 @@
 package fr.uga.gestioncinema.service.impl;
 
-import fr.uga.gestioncinema.repositories.CategorieRepository;
 import fr.uga.gestioncinema.dto.CategoryDto;
-import fr.uga.gestioncinema.exceptions.NotFoundException;
+import fr.uga.gestioncinema.exceptions.CustomErrorService;
 import fr.uga.gestioncinema.mappers.CategoryMapper;
+import fr.uga.gestioncinema.repositories.CategorieRepository;
 import fr.uga.gestioncinema.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static fr.uga.gestioncinema.utils.StringUtils.Exceptions.NO_DATA;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +19,12 @@ public class CategoryServiceImp implements CategoryService {
 
     private final CategorieRepository repository;
     private final CategoryMapper mapper;
+    @Autowired
+    CustomErrorService customErrorService;
     @Override
     public CategoryDto fetchOne(Long id) {
         return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NO_DATA)));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
     }
 
     @Override
@@ -38,7 +40,8 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public CategoryDto update(@Valid final CategoryDto categoryDto) {
         final var category = repository.findById(categoryDto.getId())
-                .orElseThrow(()-> new NotFoundException(NO_DATA));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND));
+
 
         mapper.update(categoryDto, category);
         repository.save(category);

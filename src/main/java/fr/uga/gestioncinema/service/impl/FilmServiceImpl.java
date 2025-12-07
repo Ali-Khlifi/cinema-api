@@ -2,24 +2,27 @@ package fr.uga.gestioncinema.service.impl;
 
 import fr.uga.gestioncinema.dto.FilmDto;
 import fr.uga.gestioncinema.entities.Film;
-import fr.uga.gestioncinema.exceptions.NotFoundException;
+import fr.uga.gestioncinema.exceptions.CustomErrorService;
+import fr.uga.gestioncinema.exceptions.ErrorCode;
 import fr.uga.gestioncinema.mappers.FilmMapper;
 import fr.uga.gestioncinema.repositories.FilmRepository;
 import fr.uga.gestioncinema.service.FilmService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import static fr.uga.gestioncinema.utils.StringUtils.Exceptions.NO_DATA;
-
 
 @Service
 @RequiredArgsConstructor
 public class FilmServiceImpl implements FilmService {
+    @Autowired
+    CustomErrorService customErrorService;
     private final FilmRepository filmRepository;
     private final FilmMapper filmMapper;
 
@@ -42,7 +45,7 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public FilmDto fetchOne(Long id) {
         return filmMapper.toDto(filmRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NO_DATA)));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
     }
 
     @Override
@@ -61,7 +64,8 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public FilmDto update(FilmDto dto) {
         final var film = filmRepository.findById(dto.getId())
-                .orElseThrow(() -> new NotFoundException(NO_DATA));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND));
+
 
         filmMapper.update(dto, film);
 

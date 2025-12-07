@@ -2,24 +2,26 @@ package fr.uga.gestioncinema.service.impl;
 
 import fr.uga.gestioncinema.dto.TicketDto;
 import fr.uga.gestioncinema.entities.Ticket;
-import fr.uga.gestioncinema.exceptions.NotFoundException;
+import fr.uga.gestioncinema.exceptions.CustomErrorService;
 import fr.uga.gestioncinema.mappers.TicketMapper;
 import fr.uga.gestioncinema.repositories.TicketRepository;
 import fr.uga.gestioncinema.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.model.TicketReservation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.uga.gestioncinema.utils.StringUtils.Exceptions.NO_DATA;
-
 @Primary
 @Service
 @RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
+    @Autowired
+    CustomErrorService customErrorService;
     private final TicketRepository repository;
     private final TicketMapper mapper;
 
@@ -32,7 +34,8 @@ public class TicketServiceImpl implements TicketService {
 
         for(Long id : ticketIdsClient){
             ticketsReserved.add(mapper.toDto(repository.findById(id)
-                    .orElseThrow(() -> new NotFoundException(NO_DATA))));
+                    .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND))));
+
         }
         for(TicketDto ticketDto : ticketsReserved){
             ticketDto.setNomClient(ticketReservation.getNomClient());
@@ -51,7 +54,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public TicketDto fetchOne(Long id) {
         return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NO_DATA)));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
     }
 
     @Override
@@ -78,7 +81,8 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public TicketDto update(TicketDto dto) {
         final var ticket = repository.findById(dto.getId())
-                .orElseThrow(() -> new NotFoundException(NO_DATA));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND));
+
 
         mapper.update(dto, ticket);
 

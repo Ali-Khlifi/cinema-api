@@ -45,7 +45,9 @@ public class FilmServiceImpl implements FilmService {
     @Override
     public FilmDto fetchOne(Long id) {
         return filmMapper.toDto(filmRepository.findById(id)
-                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
+                .orElseThrow(() -> customErrorService.customErrorException(ErrorCode.FILM_NOT_FOUND,
+                        id
+                )));
     }
 
     @Override

@@ -3,6 +3,7 @@ package fr.uga.gestioncinema.service.impl;
 import fr.uga.gestioncinema.dto.CinemaDto;
 import fr.uga.gestioncinema.dto.VilleDto;
 import fr.uga.gestioncinema.exceptions.CustomErrorService;
+import fr.uga.gestioncinema.exceptions.ErrorCode;
 import fr.uga.gestioncinema.mappers.CinemaMapper;
 import fr.uga.gestioncinema.mappers.VilleMapper;
 import fr.uga.gestioncinema.repositories.CinemaRepository;
@@ -27,7 +28,9 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public CinemaDto fetchOne(Long id) {
         return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
+                .orElseThrow(() -> customErrorService.customErrorException(ErrorCode.CINEMA_NOT_FOUND,
+                        id
+                )));
 
     }
 

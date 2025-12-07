@@ -1,9 +1,11 @@
 package fr.uga.gestioncinema.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 
+@Getter
 public enum ErrorCode {
 
     // FILMS
@@ -11,6 +13,9 @@ public enum ErrorCode {
     FILM_CREATION_ERROR("service-film-error-002", HttpStatus.BAD_REQUEST),
     FILM_ALREADY_EXISTS("service-film-error-003", HttpStatus.CONFLICT),
     FILM_INVALID_DURATION("service-film-error-004", HttpStatus.BAD_REQUEST),
+
+    // CINEMAS
+    CINEMA_NOT_FOUND("service-cinemas-error-001", HttpStatus.NOT_FOUND),
 
     // SALLES
     SALLE_NOT_FOUND("service-salle-error-001", HttpStatus.NOT_FOUND),
@@ -51,13 +56,6 @@ public enum ErrorCode {
         this.httpStatus = httpStatus;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
-    }
     // Method to get ErrorCode from code string
     public static ErrorCode fromCode(String code) {
         return Arrays.stream(values())

@@ -1,28 +1,31 @@
 package fr.uga.gestioncinema.service.impl;
 
 import fr.uga.gestioncinema.dto.FilmProjectionDto;
-import fr.uga.gestioncinema.exceptions.NotFoundException;
+import fr.uga.gestioncinema.exceptions.CustomErrorService;
 import fr.uga.gestioncinema.mappers.FilmProjectionMapper;
 import fr.uga.gestioncinema.repositories.FilmProjectionRepository;
 import fr.uga.gestioncinema.service.FilmProjectionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static fr.uga.gestioncinema.utils.StringUtils.Exceptions.NO_DATA;
 
 
 @Service
 @RequiredArgsConstructor
 public class FilmProjectionServiceImpl implements FilmProjectionService {
+    @Autowired
+    CustomErrorService customErrorService;
     private final FilmProjectionRepository repository;
     private final FilmProjectionMapper mapper;
 
     @Override
     public FilmProjectionDto fetchOne(Long id) {
         return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NO_DATA)));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
+
     }
 
     @Override
@@ -48,7 +51,7 @@ public class FilmProjectionServiceImpl implements FilmProjectionService {
     @Override
     public FilmProjectionDto update(FilmProjectionDto dto) {
         final var filmProjection = repository.findById(dto.getId())
-                .orElseThrow(() -> new NotFoundException(NO_DATA));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND));
 
         mapper.update(dto, filmProjection);
 

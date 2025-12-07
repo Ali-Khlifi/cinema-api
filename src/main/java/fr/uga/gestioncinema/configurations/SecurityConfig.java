@@ -42,7 +42,7 @@ public class SecurityConfig {
     @Bean
     public JwtDecoder jwtDecoder() {
         // get public key from Keycloak
-        String jwkSetUri = "http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/certs";
+        String jwkSetUri = "http://localhost:8088//realms/cinemas-app/protocol/openid-connect/certs";
         return NimbusJwtDecoder.withJwkSetUri(
                 jwkSetUri
         ).build();

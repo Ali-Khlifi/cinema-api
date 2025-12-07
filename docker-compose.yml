@@ -132,7 +132,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db_cinema
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
-      SERVER_PORT: 8082
       SERVER_SERVLET_CONTEXT_PATH: /api
       KEYCLOAK_URL: http://keycloak:8080
     networks:

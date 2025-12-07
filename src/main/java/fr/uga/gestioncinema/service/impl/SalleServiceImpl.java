@@ -2,31 +2,31 @@ package fr.uga.gestioncinema.service.impl;
 
 import fr.uga.gestioncinema.dto.CinemaDto;
 import fr.uga.gestioncinema.dto.SalleDto;
-import fr.uga.gestioncinema.exceptions.NotFoundException;
-import fr.uga.gestioncinema.mappers.CinemaMapper;
+import fr.uga.gestioncinema.exceptions.CustomErrorService;
 import fr.uga.gestioncinema.mappers.SalleMapper;
-import fr.uga.gestioncinema.repositories.CinemaRepository;
 import fr.uga.gestioncinema.repositories.SalleRepository;
-import fr.uga.gestioncinema.service.CinemaService;
 import fr.uga.gestioncinema.service.SalleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static fr.uga.gestioncinema.utils.StringUtils.Exceptions.NO_DATA;
 
 
 @Service
 @RequiredArgsConstructor
 public class SalleServiceImpl implements SalleService {
+    @Autowired
+    CustomErrorService customErrorService;
     private final SalleRepository repository;
     private final SalleMapper mapper;
 
     @Override
     public SalleDto fetchOne(Long id) {
         return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NO_DATA)));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
+
     }
 
     @Override
@@ -45,7 +45,8 @@ public class SalleServiceImpl implements SalleService {
     @Override
     public SalleDto update(SalleDto dto) {
         final var salle = repository.findById(dto.getId())
-                .orElseThrow(() -> new NotFoundException(NO_DATA));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND));
+
 
         mapper.update(dto, salle);
 

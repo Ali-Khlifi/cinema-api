@@ -1,32 +1,32 @@
 package fr.uga.gestioncinema.service.impl;
 
-import fr.uga.gestioncinema.dto.CategoryDto;
 import fr.uga.gestioncinema.dto.VilleDto;
-import fr.uga.gestioncinema.exceptions.NotFoundException;
-import fr.uga.gestioncinema.mappers.CategoryMapper;
+import fr.uga.gestioncinema.exceptions.CustomErrorService;
 import fr.uga.gestioncinema.mappers.VilleMapper;
-import fr.uga.gestioncinema.repositories.CategorieRepository;
 import fr.uga.gestioncinema.repositories.VilleRepository;
-import fr.uga.gestioncinema.service.CategoryService;
 import fr.uga.gestioncinema.service.VilleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static fr.uga.gestioncinema.utils.StringUtils.Exceptions.NO_DATA;
-
 @Service
 @RequiredArgsConstructor
 public class VilleServiceImp implements VilleService {
+
+    @Autowired
+    CustomErrorService customErrorService;
 
     private final VilleRepository repository;
     private final VilleMapper mapper;
     @Override
     public VilleDto fetchOne(Long id) {
         return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(NO_DATA)));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
+
     }
 
     @Override
@@ -42,7 +42,8 @@ public class VilleServiceImp implements VilleService {
     @Override
     public VilleDto update(@Valid final VilleDto dto) {
         final var ville = repository.findById(dto.getId())
-                .orElseThrow(()-> new NotFoundException(NO_DATA));
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND));
+
 
         mapper.update(dto, ville);
         repository.save(ville);

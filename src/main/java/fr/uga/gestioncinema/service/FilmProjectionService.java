@@ -12,7 +12,7 @@ public interface FilmProjectionService {
     FilmProjectionDto save(@Valid FilmProjectionDto dto);
     List<FilmProjectionDto> fetchAll();
     FilmProjectionDto update(@Valid FilmProjectionDto dto);
-    List<FilmProjectionDto> findBySalle(Long salleId);
+    List<FilmProjectionDto> findByRoom(Long roomId);
 
     void delete(Long id);
 

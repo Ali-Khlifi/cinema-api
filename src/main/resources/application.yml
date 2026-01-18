@@ -45,6 +45,12 @@ keycloak:
   credentials:
     secret: iAMf2UoLD0SrT4zslz7uvqJ24l1kTKiK
 
+# Stripe Payment Configuration
+stripe:
+  api-key: sk_test_51Sgr9pIsAB9sduavWz5UuyeXZ5I9S3xEnewuzaj1u6wicNwYfHuWnBoZgkQrhfFApKVjFdZmJ2WGde03g8OFlGlv00Xyuesejc
+  webhook-secret: whsec_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  currency: EUR
+
 web:
   cors:
     allowed-origins: "http://localhost:4200"

@@ -1,11 +1,11 @@
 package fr.uga.gestioncinema.service.impl;
 
 import fr.uga.gestioncinema.dto.CinemaDto;
-import fr.uga.gestioncinema.dto.VilleDto;
+import fr.uga.gestioncinema.dto.CityDto;
 import fr.uga.gestioncinema.exceptions.CustomErrorService;
 import fr.uga.gestioncinema.exceptions.ErrorCode;
 import fr.uga.gestioncinema.mappers.CinemaMapper;
-import fr.uga.gestioncinema.mappers.VilleMapper;
+import fr.uga.gestioncinema.mappers.CityMapper;
 import fr.uga.gestioncinema.repositories.CinemaRepository;
 import fr.uga.gestioncinema.service.CinemaService;
 import lombok.RequiredArgsConstructor;
@@ -15,23 +15,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+/**
+ * Service implementation for Cinema entity operations.
+ */
 @Service
 @RequiredArgsConstructor
 public class CinemaServiceImpl implements CinemaService {
+    
     @Autowired
     CustomErrorService customErrorService;
+    
     private final CinemaRepository repository;
     private final CinemaMapper mapper;
-    private final VilleMapper villeMapper;
+    private final CityMapper cityMapper;
 
     @Override
     public CinemaDto fetchOne(Long id) {
         return mapper.toDto(repository.findById(id)
-                .orElseThrow(() -> customErrorService.customErrorException(ErrorCode.CINEMA_NOT_FOUND,
-                        id
-                )));
-
+                .orElseThrow(() -> customErrorService.customErrorException(ErrorCode.CINEMA_NOT_FOUND, id)));
     }
 
     @Override
@@ -50,8 +51,7 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public CinemaDto update(CinemaDto dto) {
         final var cinema = repository.findById(dto.getId())
-                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND));
-
+                .orElseThrow(() -> customErrorService.customErrorException("Cinema not found", HttpStatus.NOT_FOUND));
 
         mapper.update(dto, cinema);
 
@@ -59,9 +59,8 @@ public class CinemaServiceImpl implements CinemaService {
     }
 
     @Override
-    public List<CinemaDto> findByVille(VilleDto dto) {
-
-        return repository.findByVilleName(dto.getName())
+    public List<CinemaDto> findByCity(CityDto dto) {
+        return repository.findByCityEntityName(dto.getName())
                 .stream()
                 .map(mapper::toDto)
                 .toList();
@@ -70,8 +69,5 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
-
     }
-
 }
-

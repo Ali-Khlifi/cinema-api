@@ -122,16 +122,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /filmProjection/bySalle:
+  /filmProjection/byRoom:
     get:
       tags:
         - FilmProjection
-      summary: 'FilmProjection by Salle'
-      operationId: findBySalle
+      summary: 'Film projections by room'
+      operationId: findByRoom
       parameters:
-        - name: salleId
+        - name: roomId
           in: query
-          description: 'Find projections by its salle'
+          description: 'Find projections by room'
           required: true
           schema:
             type: integer
@@ -155,76 +155,78 @@ paths:
 components:
   schemas:
     'FilmProjectionOpenApiModel':
-      description: 'Object representing a currently accessible ressource'
+      description: 'Object representing a film projection/showtime'
       type: object
       required:
-          - dateProjection
-          - prix
-          - film
-          - salleId
-          - seance
+          - projectionDate
+          - startTime
+          - endTime
+          - roomId
       properties:
         id:
           type: integer
           format: int64
-        dateProjection:
+        projectionDate:
           type: string
-          format: date-time
-        prix:
-          type: number
-          format: double
-        film:
-          $ref: '#/components/schemas/FilmOpenApiModel'
-        salleId:
+          format: date
+          description: 'Date of the projection'
+        startTime:
+          type: string
+          description: 'Start time of the projection (HH:mm:ss format)'
+          example: '14:30:00'
+        endTime:
+          type: string
+          description: 'End time of the projection (HH:mm:ss format)'
+          example: '16:45:00'
+        maxProjections:
+          type: integer
+          description: 'Maximum projections per day'
+        filmId:
           type: integer
           format: int64
-        seance:
-          $ref: '#/components/schemas/SeanceOpenApiModel'
+          description: 'ID of the film being projected'
+        film:
+          $ref: '#/components/schemas/FilmOpenApiModel'
+        roomId:
+          type: integer
+          format: int64
+          description: 'ID of the room/hall'
 
     'FilmOpenApiModel':
-      description: 'Object representing a currently accessible ressource'
+      description: 'Object representing a film/movie'
       type: object
       required:
-        - titre
-        - duree
-        - realisateur
+        - title
+        - duration
+        - director
         - description
-        - photo
-        - dateSortie
+        - releaseDate
         - categoryId
       properties:
         id:
           type: integer
           format: int64
-        titre:
+        title:
           type: string
-        duree:
+          description: 'Title of the film'
+        duration:
           type: number
           format: double
-        realisateur:
+          description: 'Duration in minutes'
+        director:
           type: string
+          description: 'Director of the film'
         description:
           type: string
-        photo:
+          description: 'Synopsis/description of the film'
+        releaseDate:
           type: string
-        dateSortie:
-          type: string
-          format: date-time
+          format: date
+          description: 'Release date of the film'
         categoryId:
           type: integer
           format: int64
-
-    'SeanceOpenApiModel':
-      type: object
-      required:
-        - heureDebut
-      properties:
-        id:
-          type: integer
-          format: int64
-        heureDebut:
-          type: string
-          format: date-time
+          description: 'ID of the film category/genre'
 
     Error:
       description: 'format message for error return HTTP'

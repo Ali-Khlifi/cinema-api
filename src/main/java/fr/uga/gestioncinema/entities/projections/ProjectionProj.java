@@ -4,22 +4,24 @@ import fr.uga.gestioncinema.entities.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
+/**
+ * Spring Data REST projection for FilmProjection entity.
+ * This is DEPRECATED and should be removed after full migration to DTOs.
+ */
+@Deprecated
 @Projection(name = "p1", types = {FilmProjection.class})
 public interface ProjectionProj {
-    public Long getId();
-    public double getPrix();
-    public Date getDateProjection();
-    @Value("#{target.salle}")
-    public SalleProj getSalle();
+    Long getId();
+    LocalDate getProjectionDate();
+    
+    @Value("#{target.room}")
+    RoomProj getRoom();
+    
     @Value("#{target.film}")
-    public FilmProj getFilm();
-    public Seance getSeance();
-    public Collection<Ticket> getTickets();
-
-
-
-
+    FilmProj getFilm();
+    
+    Collection<Ticket> getTickets();
 }

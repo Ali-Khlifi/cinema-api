@@ -1,0 +1,184 @@
+# PriceType API - Cinema Management System
+# Defines endpoints for price type operations
+
+openapi: 3.0.0
+info:
+  description: 'PriceType API for Cinema Management'
+  title: 'PriceType API'
+  version: '0.0.1'
+paths:
+  /priceType:
+    get:
+      tags:
+        - PriceType
+      summary: 'Get all price types'
+      operationId: findAll
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceTypeOpenApiModel'
+    post:
+      tags:
+        - PriceType
+      summary: 'Create a new price type'
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceTypeOpenApiModel'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceTypeOpenApiModel'
+    put:
+      tags:
+        - PriceType
+      summary: 'Update existing price type'
+      operationId: update
+      requestBody:
+        description: 'Update existing price type'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceTypeOpenApiModel'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceTypeOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /priceType/{id}:
+    get:
+      tags:
+        - PriceType
+      summary: 'Get specific price type'
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: 'Find price type by id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceTypeOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - PriceType
+      summary: 'Delete a price type'
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a price type by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: DELETED
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /priceType/active:
+    get:
+      tags:
+        - PriceType
+      summary: 'Get all active price types'
+      operationId: findAllActive
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceTypeOpenApiModel'
+
+components:
+  schemas:
+    'PriceTypeOpenApiModel':
+      description: 'Object representing a price type/tariff'
+      type: object
+      required:
+        - code
+        - label
+      properties:
+        id:
+          type: integer
+          format: int64
+        code:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+        discountPercentage:
+          type: number
+          format: double
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Error:
+      description: 'Error message format for HTTP responses'
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+
+
+
+
+
+
+
+

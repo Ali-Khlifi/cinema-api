@@ -9,15 +9,23 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
+/**
+ * Repository for FilmProjection entity.
+ */
 @RepositoryRestResource
 @CrossOrigin("*")
 public interface FilmProjectionRepository extends JpaRepository<FilmProjection, Long> {
 
-    @Query(value = "SELECT DISTINCT ON (fp.film_id) * " +
-            "FROM film_projection fp " +
-            "WHERE fp.salle_id = :salleId", nativeQuery = true)
-    List<FilmProjection> findUniqueProjectionsBySalleId(@Param("salleId") Long salleId);
-
-
-
+    /**
+     * Find film projections by room ID.
+     * Uses JPQL with JOIN FETCH to properly load film and room associations.
+     * @param roomId the room ID
+     * @return list of projections with loaded associations
+     */
+    @Query("SELECT fp FROM FilmProjection fp " +
+           "JOIN FETCH fp.film f " +
+           "JOIN FETCH fp.room r " +
+           "WHERE r.id = :roomId " +
+           "ORDER BY fp.projectionDate, fp.startTime")
+    List<FilmProjection> findUniqueProjectionsByRoomId(@Param("roomId") Long roomId);
 }

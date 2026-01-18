@@ -1,0 +1,211 @@
+# Room API - Cinema Management System
+# Defines endpoints for room (screening hall) operations
+
+openapi: '3.0.0'
+info:
+  description: 'Room API for Cinema Management'
+  version: '0.0.1'
+  title: 'Room API'
+tags:
+  - name: Room
+paths:
+  /room:
+    get:
+      tags:
+        - Room
+      summary: 'Get all rooms'
+      operationId: findAll
+      responses:
+        '200':
+           description: 'OK'
+           content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                      $ref: '#/components/schemas/RoomOpenApiModel'
+    post:
+      tags:
+        - Room
+      summary: 'Create new room'
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomOpenApiModel'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomOpenApiModel'
+    put:
+      tags:
+        - Room
+      summary: 'Update existing room'
+      operationId: update
+      requestBody:
+        description: 'Update existing room'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoomOpenApiModel'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /room/{id}:
+    get:
+      tags:
+        - Room
+      summary: 'Get specific room'
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a room by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoomOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Room
+      summary: 'Delete a room'
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a room by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: DELETED
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /room/byCinema:
+    get:
+      tags:
+        - Room
+      summary: 'Get rooms by cinema name'
+      operationId: findByCinema
+      parameters:
+        - name: cinema
+          in: query
+          description: 'Find rooms by cinema name'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoomOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /rooms/{cinemaId}:
+    get:
+      tags:
+        - Room
+      summary: 'Get rooms by cinema ID'
+      operationId: findByCinemaId
+      parameters:
+        - name: cinemaId
+          in: path
+          description: 'Find rooms by cinema id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoomOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    'RoomOpenApiModel':
+      description: 'Object representing a screening room/hall'
+      type: object
+      required:
+          - name
+          - numberOfSeats
+          - cinemaId
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        numberOfSeats:
+          type: integer
+        cinemaId:
+          type: integer
+          format: int64
+
+    Error:
+      description: 'Error message format for HTTP responses'
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string

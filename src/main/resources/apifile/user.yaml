@@ -1,0 +1,200 @@
+# User API - Cinema Management System
+# Defines endpoints for user operations
+
+openapi: 3.0.0
+info:
+  description: 'User API for Cinema Management'
+  title: 'User API'
+  version: '0.0.1'
+paths:
+  /user:
+    get:
+      tags:
+        - User
+      summary: 'Get all users'
+      operationId: findAll
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserOpenApiModel'
+    post:
+      tags:
+        - User
+      summary: 'Create a new user'
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserOpenApiModel'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOpenApiModel'
+    put:
+      tags:
+        - User
+      summary: 'Update existing user'
+      operationId: update
+      requestBody:
+        description: 'Update existing user'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserOpenApiModel'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/{id}:
+    get:
+      tags:
+        - User
+      summary: 'Get specific user'
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: 'Find user by id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - User
+      summary: 'Delete a user'
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a user by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: DELETED
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /user/byEmail:
+    get:
+      tags:
+        - User
+      summary: 'Get user by email'
+      operationId: findByEmail
+      parameters:
+        - name: email
+          in: query
+          description: 'Find user by email'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    'UserOpenApiModel':
+      description: 'Object representing a user'
+      type: object
+      required:
+        - email
+        - firstName
+        - lastName
+      properties:
+        id:
+          type: integer
+          format: int64
+        keycloakId:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Error:
+      description: 'Error message format for HTTP responses'
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+
+
+
+
+
+
+
+

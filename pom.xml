@@ -15,6 +15,7 @@
     <description>Gestion-Cinema</description>
     <properties>
         <java.version>17</java.version>
+        <lombok.version>1.18.30</lombok.version> <!-- Updated for Java 17 compatibility -->
         <springdoc.version>2.0.3</springdoc.version>
         <swaggerparser.version>2.1.3</swaggerparser.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
@@ -145,6 +146,14 @@
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
         </dependency>
+        
+        <!-- STRIPE Payment Processing -->
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>24.3.0</version>
+        </dependency>
+        
         <!--PROD-->
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -228,7 +237,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.10.1</version> <!-- Downgraded from 3.11.0 due to Lombok compatibility issue -->
                 <configuration>
                     <release>${java.version}</release>
                     <annotationProcessorPaths>
@@ -327,14 +336,14 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>ville</id>
+                        <id>city</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${apifile}/ville.yaml</inputSpec>
+                            <inputSpec>${apifile}/city.yaml</inputSpec>
                             <importMappings>
-                                <importMapping>VillePage=${springpage}</importMapping>
+                                <importMapping>CityPage=${springpage}</importMapping>
                             </importMappings>
                         </configuration>
                     </execution>
@@ -351,38 +360,74 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>salle</id>
+                        <id>room</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${apifile}/salle.yaml</inputSpec>
+                            <inputSpec>${apifile}/room.yaml</inputSpec>
                             <importMappings>
-                                <importMapping>SallePage=${springpage}</importMapping>
+                                <importMapping>RoomPage=${springpage}</importMapping>
                             </importMappings>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>place</id>
+                        <id>seat</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${apifile}/place.yaml</inputSpec>
+                            <inputSpec>${apifile}/seat.yaml</inputSpec>
                             <importMappings>
-                                <importMapping>PlacePage=${springpage}</importMapping>
+                                <importMapping>SeatPage=${springpage}</importMapping>
                             </importMappings>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>seance</id>
+                        <id>user</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${apifile}/seance.yaml</inputSpec>
+                            <inputSpec>${apifile}/user.yaml</inputSpec>
                             <importMappings>
-                                <importMapping>SeancePage=${springpage}</importMapping>
+                                <importMapping>UserPage=${springpage}</importMapping>
+                            </importMappings>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>priceType</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${apifile}/priceType.yaml</inputSpec>
+                            <importMappings>
+                                <importMapping>PriceTypePage=${springpage}</importMapping>
+                            </importMappings>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>reservation</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${apifile}/reservation.yaml</inputSpec>
+                            <importMappings>
+                                <importMapping>ReservationPage=${springpage}</importMapping>
+                            </importMappings>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>payment</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${apifile}/payment.yaml</inputSpec>
+                            <importMappings>
+                                <importMapping>PaymentPage=${springpage}</importMapping>
                             </importMappings>
                         </configuration>
                     </execution>

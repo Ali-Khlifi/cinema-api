@@ -1,23 +1,30 @@
 package fr.uga.gestioncinema.dto;
 
-import fr.uga.gestioncinema.entities.Film;
-import fr.uga.gestioncinema.entities.Salle;
-import fr.uga.gestioncinema.entities.Seance;
-import fr.uga.gestioncinema.entities.Ticket;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Collection;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+/**
+ * Data Transfer Object for FilmProjection entity.
+ * Includes time fields merged from Seance.
+ * Price is managed at Ticket level with PriceType discounts.
+ */
 @Data
 @Builder
 public class FilmProjectionDto {
     private Long id;
-    private Date dateProjection;
-    private double prix;
-    private Long salleId;
+    private LocalDate projectionDate;
+    
+    // Time fields merged from Seance
+    private LocalTime startTime;
+    private LocalTime endTime;
+    
+    // Maximum projections per day
+    private Integer maxProjections;
+    
+    private Long filmId;
+    private Long roomId;
     private FilmDto film;
-    private SeanceDto seance;
 }

@@ -37,12 +37,12 @@ public class TicketServiceImpl implements TicketService {
                     .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND))));
 
         }
-        for(TicketDto ticketDto : ticketsReserved){
+        /*for(TicketDto ticketDto : ticketsReserved){
             ticketDto.setNomClient(ticketReservation.getNomClient());
             ticketDto.setCodePayement(ticketReservation.getCodePayement());
             ticketDto.setReservee(true);
             repository.save( mapper.toEntity(ticketDto));
-        }
+        }*/
         return ticketsReserved;
     }
 
@@ -72,7 +72,15 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<TicketDto> findByFilmProjection(Long filmProjectionId) {
-        return repository.findByFilmProjection_Id(filmProjectionId)
+        return repository.findByFilmProjectionId(filmProjectionId)
+                .stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    // DEPRECATED - old implementation
+    private List<TicketDto> findByFilmProjectionOld(Long filmProjectionId) {
+        return repository.findById(filmProjectionId)
                 .stream()
                 .map(mapper::toDto)
                 .toList();

@@ -122,16 +122,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /cinema/byVille:
+  /cinema/byCity:
     get:
       tags:
         - Cinema
-      summary: 'Cinemas by Ville'
-      operationId: findByVille
+      summary: 'Cinemas by city'
+      operationId: findByCity
       parameters:
-        - name: ville
+        - name: city
           in: query
-          description: 'Find cinemas by its ville'
+          description: 'Find cinemas by city name'
           required: true
           schema:
             type: string
@@ -160,7 +160,6 @@ components:
         - name
         - nombreSalles
         - villeId
-        - adresse
       properties:
         id:
           type: integer
@@ -172,8 +171,22 @@ components:
         villeId:
           type: integer
           format: int64
+        city:
+          type: string
+          description: 'City name'
+        postalCode:
+          type: string
+          description: 'Postal code'
+        streetNumber:
+          type: string
+          description: 'Street number'
+        streetName:
+          type: string
+          description: 'Street name'
         adresse:
           type: string
+          description: 'Deprecated: Full address (use separate fields instead)'
+          deprecated: true
 
     Error:
       description: 'format message for error return HTTP'

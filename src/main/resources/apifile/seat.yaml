@@ -1,0 +1,149 @@
+# Seat API - Cinema Management System
+# Defines endpoints for seat operations
+
+openapi: '3.0.0'
+info:
+  description: 'Seat API for Cinema Management'
+  version: '0.0.1'
+  title: 'Seat API'
+tags:
+  - name: Seat
+paths:
+  /seat:
+    get:
+      tags:
+        - Seat
+      summary: 'Get all seats'
+      operationId: findAll
+      responses:
+        '200':
+           description: 'OK'
+           content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                      $ref: '#/components/schemas/SeatOpenApiModel'
+    post:
+      tags:
+        - Seat
+      summary: 'Create new seat'
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeatOpenApiModel'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeatOpenApiModel'
+    put:
+      tags:
+        - Seat
+      summary: 'Update existing seat'
+      operationId: update
+      requestBody:
+        description: 'Update existing seat'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeatOpenApiModel'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeatOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /seat/{id}:
+    get:
+      tags:
+        - Seat
+      summary: 'Get specific seat'
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a seat by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeatOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Seat
+      summary: 'Delete a seat'
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a seat by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: DELETED
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    'SeatOpenApiModel':
+      description: 'Object representing a seat in a room'
+      type: object
+      required:
+        - number
+        - roomId
+      properties:
+        id:
+          type: integer
+          format: int64
+        number:
+          type: integer
+        roomId:
+          type: integer
+          format: int64
+
+    Error:
+      description: 'Error message format for HTTP responses'
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string

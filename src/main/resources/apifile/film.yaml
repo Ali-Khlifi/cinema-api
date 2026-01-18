@@ -184,41 +184,40 @@ paths:
 components:
   schemas:
     'FilmOpenApiModel':
-      description: 'Object representing a currently accessible ressource'
+      description: 'Object representing a film/movie'
       type: object
       required:
-          - titre
-          - duree
-          - realisateur
+          - title
+          - duration
+          - director
           - description
-          - media
-          - dateSortie
-          - filmProjections
+          - releaseDate
           - categoryId
       properties:
         id:
           type: integer
           format: int64
-        titre:
+        title:
           type: string
-        duree:
+          description: 'Title of the film'
+        duration:
           type: number
           format: double
-        realisateur:
+          description: 'Duration in minutes'
+        director:
           type: string
-        media:
+          description: 'Director of the film'
+        description:
           type: string
-          format: binary
-        dateSortie:
+          description: 'Synopsis/description of the film'
+        releaseDate:
           type: string
-          format: date-time
-        filmProjections:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilmProjectionOpenApiModel'
+          format: date
+          description: 'Release date of the film'
         categoryId:
           type: integer
           format: int64
+          description: 'ID of the film category/genre'
 
     'FilmProjectionOpenApiModel':
       type: object
@@ -226,12 +225,18 @@ components:
         id:
           type: integer
           format: int64
-        dateProjection:
+        startTime:
           type: string
           format: date-time
-        prix:
+          description: 'Start time of the projection'
+        endTime:
+          type: string
+          format: date-time
+          description: 'End time of the projection'
+        basePrice:
           type: number
           format: double
+          description: 'Base price for this projection'
 
     Error:
       description: 'format message for error return HTTP'

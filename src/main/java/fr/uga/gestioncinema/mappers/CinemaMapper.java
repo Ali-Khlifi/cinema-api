@@ -11,14 +11,17 @@ import org.openapitools.model.CinemaOpenApiModel;
 
 import java.util.List;
 
+/**
+ * MapStruct mapper for Cinema entity and DTOs.
+ */
 @Mapper(config = MapperConfig.class)
 public interface CinemaMapper {
 
-
-    @Mapping(source = "ville.id", target = "villeId")
+    @Mapping(source = "cityEntity.id", target = "cityId")
     CinemaDto toDto(Cinema cinemaEntity);
 
-    @Mapping(source = "villeId", target = "ville.id")
+    @Mapping(source = "cityId", target = "cityEntity.id")
+    @Mapping(target = "rooms", ignore = true)
     Cinema toEntity(CinemaDto cinemaDto);
 
     CinemaDto toDto(CinemaOpenApiModel model);
@@ -27,8 +30,7 @@ public interface CinemaMapper {
 
     List<CinemaOpenApiModel> toOpenApiModelList(List<CinemaDto> listCinemaDto);
 
-    @Mapping(source = "villeId", target = "ville.id")
+    @Mapping(source = "cityId", target = "cityEntity.id")
+    @Mapping(target = "rooms", ignore = true)
     void update(@Valid CinemaDto source, @MappingTarget Cinema target);
-
-
 }

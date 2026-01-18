@@ -11,15 +11,20 @@ import org.openapitools.model.TicketOpenApiModel;
 
 import java.util.List;
 
-@Mapper(config = MapperConfig.class, uses = {PlaceMapper.class, FilmProjectionMapper.class})
+/**
+ * MapStruct mapper for Ticket entity and DTOs.
+ */
+@Mapper(config = MapperConfig.class, uses = {SeatMapper.class, ReservationMapper.class, PriceTypeMapper.class})
 public interface TicketMapper {
 
-    @Mapping(source = "place.id", target = "placeId")
-    @Mapping(source = "filmProjection.id", target = "filmProjectionId")
+    @Mapping(source = "reservation.id", target = "reservationId")
+    @Mapping(source = "seat.id", target = "seatId")
+    @Mapping(source = "priceType.id", target = "priceTypeId")
     TicketDto toDto(Ticket entity);
 
-    @Mapping(source = "placeId", target = "place.id")
-    @Mapping(source = "filmProjectionId", target = "filmProjection.id")
+    @Mapping(source = "reservationId", target = "reservation.id")
+    @Mapping(source = "seatId", target = "seat.id")
+    @Mapping(source = "priceTypeId", target = "priceType.id")
     Ticket toEntity(TicketDto dto);
 
     TicketDto toDto(TicketOpenApiModel model);
@@ -28,9 +33,8 @@ public interface TicketMapper {
 
     List<TicketOpenApiModel> toOpenApiModelList(List<TicketDto> listTicketDto);
 
-    @Mapping(source = "placeId", target = "place.id")
-    @Mapping(source = "filmProjectionId", target = "filmProjection.id")
+    @Mapping(source = "reservationId", target = "reservation.id")
+    @Mapping(source = "seatId", target = "seat.id")
+    @Mapping(source = "priceTypeId", target = "priceType.id")
     void update(@Valid TicketDto source, @MappingTarget Ticket target);
-
-
 }

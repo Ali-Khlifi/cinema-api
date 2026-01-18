@@ -1,0 +1,260 @@
+# Reservation API - Cinema Management System
+# Defines endpoints for reservation operations
+
+openapi: 3.0.0
+info:
+  description: 'Reservation API for Cinema Management'
+  title: 'Reservation API'
+  version: '0.0.1'
+paths:
+  /reservation:
+    get:
+      tags:
+        - Reservation
+      summary: 'Get all reservations'
+      operationId: findAll
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservationOpenApiModel'
+    post:
+      tags:
+        - Reservation
+      summary: 'Create a new reservation'
+      operationId: create
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationOpenApiModel'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationOpenApiModel'
+    put:
+      tags:
+        - Reservation
+      summary: 'Update existing reservation'
+      operationId: update
+      requestBody:
+        description: 'Update existing reservation'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationOpenApiModel'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reservation/{id}:
+    get:
+      tags:
+        - Reservation
+      summary: 'Get specific reservation'
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: 'Find reservation by id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationOpenApiModel'
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Reservation
+      summary: 'Delete a reservation'
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: 'Find a reservation by its id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: DELETED
+        '404':
+          description: 'NOT FOUND'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /reservation/user/{userId}:
+    get:
+      tags:
+        - Reservation
+      summary: 'Get reservations by user ID'
+      operationId: findByUserId
+      parameters:
+        - name: userId
+          in: path
+          description: 'Find reservations by user ID'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReservationOpenApiModel'
+
+  /reservation/{id}/cancel:
+    put:
+      tags:
+        - Reservation
+      summary: 'Cancel a reservation'
+      operationId: cancelReservation
+      parameters:
+        - name: id
+          in: path
+          description: 'Reservation ID'
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: reason
+          in: query
+          description: 'Cancellation reason'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK'
+        '404':
+          description: 'NOT FOUND'
+
+  /reservation/{id}/confirm:
+    put:
+      tags:
+        - Reservation
+      summary: 'Confirm a reservation'
+      operationId: confirmReservation
+      parameters:
+        - name: id
+          in: path
+          description: 'Reservation ID'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'OK'
+        '404':
+          description: 'NOT FOUND'
+
+components:
+  schemas:
+    'ReservationOpenApiModel':
+      description: 'Object representing a reservation'
+      type: object
+      required:
+        - userId
+        - filmProjectionId
+      properties:
+        id:
+          type: integer
+          format: int64
+        referenceNumber:
+          type: string
+        userId:
+          type: integer
+          format: int64
+        filmProjectionId:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [PENDING, CONFIRMED, CANCELLED, EXPIRED]
+        subtotal:
+          type: number
+        taxAmount:
+          type: number
+        discountAmount:
+          type: number
+        totalAmount:
+          type: number
+        promoCode:
+          type: string
+        reservationDate:
+          type: string
+          format: date-time
+        expirationDate:
+          type: string
+          format: date-time
+        confirmationDate:
+          type: string
+          format: date-time
+        cancellationDate:
+          type: string
+          format: date-time
+        cancellationReason:
+          type: string
+        termsAccepted:
+          type: boolean
+          description: 'User accepted terms and conditions (required for payment)'
+        marketingConsent:
+          type: boolean
+          description: 'User consents to receive marketing communications'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Error:
+      description: 'Error message format for HTTP responses'
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+

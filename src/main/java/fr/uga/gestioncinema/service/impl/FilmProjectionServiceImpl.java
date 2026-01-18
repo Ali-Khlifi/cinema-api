@@ -41,8 +41,8 @@ public class FilmProjectionServiceImpl implements FilmProjectionService {
                 .toList();
     }
     @Override
-    public List<FilmProjectionDto> findBySalle(Long salleId) {
-        return repository.findUniqueProjectionsBySalleId(salleId)
+    public List<FilmProjectionDto> findByRoom(Long roomId) {
+        return repository.findUniqueProjectionsByRoomId(roomId)
                 .stream()
                 .map(mapper::toDto)
                 .toList();

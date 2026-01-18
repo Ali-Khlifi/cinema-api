@@ -5,28 +5,47 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
+
+/**
+ * Entity representing a Film in the cinema management system.
+ */
 @Entity
+@Table(name = "film")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-public class Film {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Film implements Serializable {
+    
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String titre;
-    private double duree;
-    private String realisateur;
+    
+    @Column(nullable = false, length = 255)
+    private String title;
+    
+    private double duration;
+    
+    private String director;
+    
+    @Column(columnDefinition = "TEXT")
     private String description;
-    private Date dateSortie;
-    @Column(name = "media", columnDefinition = "bytea", nullable = true)
-    private byte [] media;
+    
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
+    
+    @Column(name = "media", columnDefinition = "bytea")
+    private byte[] media;
+    
     @OneToMany(mappedBy = "film")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JsonIgnore
     private Collection<FilmProjection> filmProjections;
+    
     @ManyToOne
+    @JoinColumn(name = "category_id")
     @JsonIgnore
     private Category category;
 }

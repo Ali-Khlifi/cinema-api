@@ -1,0 +1,191 @@
+openapi: 3.0.3
+info:
+  title: Cinema Payment API
+  description: 'Payment operations with Stripe integration'
+  version: 1.0.0
+  contact:
+    name: Cinema API Team
+
+servers:
+  - url: http://localhost:8082/api
+    description: Local development server
+
+tags:
+  - name: Payment
+    description: 'Payment operations with Stripe'
+
+paths:
+  /payment/create-payment-intent:
+    post:
+      tags:
+        - Payment
+      summary: 'Create Stripe Payment Intent'
+      description: 'Creates a Stripe Payment Intent for a reservation. Returns client_secret for frontend Stripe.js integration.'
+      operationId: createPaymentIntent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentIntentRequest'
+      responses:
+        '201':
+          description: 'Payment Intent created successfully'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentIntentResponse'
+        '400':
+          description: 'Bad request - validation error'
+        '404':
+          description: 'Reservation not found'
+        '500':
+          description: 'Internal server error'
+
+  /payment/intent/{paymentIntentId}:
+    get:
+      tags:
+        - Payment
+      summary: 'Get payment transaction by Stripe PaymentIntent ID'
+      description: 'Retrieves payment transaction details using Stripe PaymentIntent ID'
+      operationId: getByPaymentIntentId
+      parameters:
+        - name: paymentIntentId
+          in: path
+          required: true
+          description: 'Stripe PaymentIntent ID'
+          schema:
+            type: string
+          example: 'pi_3QXxxxxxxxxxxxx'
+      responses:
+        '200':
+          description: 'Payment transaction found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentTransactionOpenApiModel'
+        '404':
+          description: 'Payment transaction not found'
+
+  /payment/reservation/{reservationId}:
+    get:
+      tags:
+        - Payment
+      summary: 'Get all payment transactions for a reservation'
+      description: 'Retrieves all payment transactions associated with a reservation'
+      operationId: getByReservationId
+      parameters:
+        - name: reservationId
+          in: path
+          required: true
+          description: 'Reservation ID'
+          schema:
+            type: integer
+            format: int64
+          example: 789
+      responses:
+        '200':
+          description: 'Payment transactions retrieved successfully'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentTransactionOpenApiModel'
+
+
+components:
+  schemas:
+    CreatePaymentIntentRequest:
+      type: object
+      required:
+        - reservationId
+      properties:
+        reservationId:
+          type: integer
+          format: int64
+          description: 'Reservation ID to create payment for'
+          example: 789
+
+    PaymentIntentResponse:
+      type: object
+      required:
+        - clientSecret
+        - amount
+        - currency
+        - paymentIntentId
+      properties:
+        clientSecret:
+          type: string
+          description: 'Stripe client secret for frontend (used with Stripe.js)'
+          example: 'pi_3QXxxxxxxxxxxxx_secret_yyyyyyyy'
+        amount:
+          type: number
+          format: double
+          description: 'Payment amount'
+          example: 12.50
+        currency:
+          type: string
+          description: 'Currency code (ISO 4217)'
+          example: 'EUR'
+        paymentIntentId:
+          type: string
+          description: 'Stripe PaymentIntent ID'
+          example: 'pi_3QXxxxxxxxxxxxx'
+
+    PaymentTransactionOpenApiModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 'Payment transaction ID'
+          example: 1
+        reservationId:
+          type: integer
+          format: int64
+          description: 'Associated reservation ID'
+          example: 789
+        stripePaymentIntentId:
+          type: string
+          description: 'Stripe PaymentIntent ID'
+          example: 'pi_3QXxxxxxxxxxxxx'
+        amount:
+          type: number
+          format: double
+          description: 'Payment amount'
+          example: 12.50
+        currency:
+          type: string
+          description: 'Currency code'
+          example: 'EUR'
+        status:
+          type: string
+          enum:
+            - PENDING
+            - SUCCESS
+            - FAILED
+            - REFUNDED
+            - CANCELLED
+          description: 'Payment status'
+          example: 'SUCCESS'
+        stripePaymentMethod:
+          type: string
+          description: 'Stripe payment method type (card, paypal, etc.)'
+          example: 'card'
+        paidAt:
+          type: string
+          format: date-time
+          description: 'Timestamp when payment was completed'
+          example: '2024-12-21T14:30:00'
+        createdAt:
+          type: string
+          format: date-time
+          description: 'Creation timestamp'
+          example: '2024-12-21T14:25:00'
+        updatedAt:
+          type: string
+          format: date-time
+          description: 'Last update timestamp'
+          example: '2024-12-21T14:30:00'
+

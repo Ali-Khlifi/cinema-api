@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: cinema-api
+    env: java
+    plan: free
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -Dserver.port=$PORT -jar target/cinemas-app-1.0.0.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cinema-db
+          property: connectionString
+      - key: KEYCLOAK_REALM
+        value: cinema-realm
+      - key: KEYCLOAK_AUTH_SERVER_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+
+databases:
+  - name: cinema-db
+    databaseName: cinema
+    plan: free
+

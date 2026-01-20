@@ -1,0 +1,60 @@
+# Production Configuration - Gestion Cinéma
+# This file is used when SPRING_PROFILES_ACTIVE=prod
+
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    validate-on-migrate: true
+  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_AUTH_SERVER_URL}/realms/${KEYCLOAK_REALM}
+          jwk-set-uri: ${KEYCLOAK_AUTH_SERVER_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/certs
+
+server:
+  port: ${PORT:8080}
+  compression:
+    enabled: true
+
+# CORS Configuration
+web:
+  cors:
+    allowed-origins: ${FRONTEND_URL:https://cinema-uga.netlify.app}
+
+# Logging
+logging:
+  level:
+    root: INFO
+    fr.uga.gestioncinema: INFO
+    org.springframework.security: INFO
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Application info (version from pom.xml)
+info:
+  app:
+    name: '@project.name@'
+    version: '@project.version@'
+    description: '@project.description@'
+    groupId: '@project.groupId@'
+    artifactId: '@project.artifactId@'
+

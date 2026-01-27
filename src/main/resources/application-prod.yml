@@ -4,6 +4,8 @@
 spring:
   datasource:
     url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME:cinema_user}
+    password: ${DATABASE_PASSWORD}
   
   jpa:
     hibernate:

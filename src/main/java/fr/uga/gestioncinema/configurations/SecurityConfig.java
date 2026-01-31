@@ -24,6 +24,10 @@ import java.util.Arrays;
 public class SecurityConfig {
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String issuerUri;
+    
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -42,16 +46,17 @@ public class SecurityConfig {
     }
     @Bean
     public JwtDecoder jwtDecoder() {
-        // get public key from Keycloak
-        String jwkSetUri = "http://localhost:8088//realms/cinemas-app/protocol/openid-connect/certs";
-        return NimbusJwtDecoder.withJwkSetUri(
-                jwkSetUri
-        ).build();
+        // get public key from Keycloak using environment variable
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
+    @Value("${web.cors.allowed-origins}")
+    private String allowedOrigins;
+    
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        // Support multiple origins separated by comma
+        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         configuration.setAllowCredentials(true);

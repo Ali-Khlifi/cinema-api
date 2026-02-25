@@ -674,15 +674,21 @@
       "clientId": "cinemas-app-client",
       "name": "",
       "description": "client cinemas app",
-      "rootUrl": "http://localhost:4200/*",
-      "adminUrl": "http://localhost:4200/*",
+      "rootUrl": "http://cinema.alikhlifi.ovh",
+      "adminUrl": "",
       "baseUrl": "",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "http://localhost:4200/*"
+        "http://localhost:4200/*",
+        "http://localhost:4200/",
+        "http://cinema.alikhlifi.ovh/*",
+        "http://cinema.alikhlifi.ovh/",
+        "http://localhost:4200/",
+        "http://cinema.alikhlifi.ovh/*",
+        "http://cinema.alikhlifi.ovh/"
       ],
       "webOrigins": [
         "*"

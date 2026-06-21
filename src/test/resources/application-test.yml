@@ -1,0 +1,52 @@
+# =============================================================================
+# Test profile configuration for TDD
+# Activated with @ActiveProfiles("test") on test classes
+# =============================================================================
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  flyway:
+    enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Dummy URIs: JWT validation is disabled in TestSecurityConfig
+          issuer-uri: http://localhost/test-issuer
+          jwk-set-uri: http://localhost/test-issuer/certs
+
+server:
+  servlet:
+    context-path: /api
+
+web:
+  cors:
+    allowed-origins: "http://localhost:4200"
+
+logging:
+  level:
+    org.springframework.security: WARN
+
+# Required by StripeConfig at startup
+stripe:
+  api-key: sk_test_dummy_key_for_tests
+  webhook-secret: whsec_dummy_secret_for_tests
+  currency: EUR
+
+keycloak:
+  auth-server_url: http://localhost:8088
+  realm: cinemas-app
+  resource: cinemas-app-client
+  credentials:
+    secret: test-secret

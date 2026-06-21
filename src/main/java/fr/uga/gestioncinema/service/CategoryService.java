@@ -13,5 +13,6 @@ public interface CategoryService {
 
     CategoryDto fetchOne(Long id);
     void delete(Long id);
+    CategoryDto findByName(String name);
 
 }

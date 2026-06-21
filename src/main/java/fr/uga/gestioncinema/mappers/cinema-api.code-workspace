@@ -8,6 +8,15 @@
 		},
 		{
 			"path": "../../../../../../../../cinema-deploy"
+		},
+		{
+			"path": "../../../../../../../../../../AutoFormation_2026/web-portfolio-ali"
+		},
+		{
+			"path": "../../../../../../../../../../AutoFormation_2026/nginx-deploy"
+		},
+		{
+			"path": "../../../../../../../../../../AutoFormation_2026/docker-compose-deployment"
 		}
 	],
 	"settings": {

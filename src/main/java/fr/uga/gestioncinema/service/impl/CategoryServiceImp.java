@@ -56,4 +56,10 @@ public class CategoryServiceImp implements CategoryService {
                 .map(mapper::toDto)
                 .toList();
     }
+    @Override
+    public CategoryDto findByName(String name) {
+        return mapper.toDto(repository.findByName(name)
+                .orElseThrow(() -> customErrorService.customErrorException("Not found", HttpStatus.NOT_FOUND)));
+
+    }
 }

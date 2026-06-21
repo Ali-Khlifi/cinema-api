@@ -26,7 +26,9 @@
         <apifile>src/main/resources/apifile</apifile>
         <apifile>src/main/resources/apifile</apifile>
         <springpage>org.springframework.data.domain.Page</springpage>
-        <!-- SonarCloud — update organization/projectKey if different on sonarcloud.io -->
+        <!-- SonarCloud keys — NOT the display name in the UI!
+             Find exact values: SonarCloud → Project Settings → Information
+             Organization key is in URL: sonarcloud.io/organizations/{orgKey}/... -->
         <sonar.organization>akhlifi-group</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectKey>akhlifi-group_cinema-api</sonar.projectKey>

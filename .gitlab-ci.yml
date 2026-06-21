@@ -75,7 +75,31 @@ sonar:
       - .sonar/cache
       - .m2/repository
   script:
-    - mvn compile sonar:sonar -DskipTests -Dsonar.token=$SONAR_TOKEN -B
+    # Fail fast with a clear message if token or project config is wrong
+    - |
+      if [ -z "$SONAR_TOKEN" ]; then
+        echo "ERROR: SONAR_TOKEN is empty. Add it in GitLab → Settings → CI/CD → Variables."
+        echo "If variable is Protected, it is only available on protected branches."
+        exit 1
+      fi
+      VALID=$(curl -s -u "${SONAR_TOKEN}:" "https://sonarcloud.io/api/authentication/validate" | grep -o '"valid":true' || true)
+      if [ -z "$VALID" ]; then
+        echo "ERROR: SONAR_TOKEN is invalid or expired. Generate a new token on sonarcloud.io → My Account → Security."
+        exit 1
+      fi
+      echo "SonarCloud token OK"
+    - |
+      # Analyze the current Git branch (develop in CI), not main
+      if [ -n "$CI_MERGE_REQUEST_IID" ]; then
+        SONAR_ARGS="-Dsonar.pullrequest.key=$CI_MERGE_REQUEST_IID \
+          -Dsonar.pullrequest.branch=$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME \
+          -Dsonar.pullrequest.base=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
+        echo "SonarCloud: merge request analysis ($CI_MERGE_REQUEST_SOURCE_BRANCH_NAME → $CI_MERGE_REQUEST_TARGET_BRANCH_NAME)"
+      else
+        SONAR_ARGS="-Dsonar.branch.name=$CI_COMMIT_REF_NAME"
+        echo "SonarCloud: branch analysis ($CI_COMMIT_REF_NAME)"
+      fi
+      mvn compile sonar:sonar -DskipTests -Dsonar.token=$SONAR_TOKEN $SONAR_ARGS -B
   needs:
     - job: test
       artifacts: true

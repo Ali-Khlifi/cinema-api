@@ -26,6 +26,12 @@
         <apifile>src/main/resources/apifile</apifile>
         <apifile>src/main/resources/apifile</apifile>
         <springpage>org.springframework.data.domain.Page</springpage>
+        <!-- SonarCloud — update organization/projectKey if different on sonarcloud.io -->
+        <sonar.organization>akhlifi-group</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectKey>akhlifi-group_cinema-api</sonar.projectKey>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.exclusions>**/target/**,**/*MapperImpl.java,**/apifile/**</sonar.exclusions>
     </properties>
     <dependencies>
         <dependency>
@@ -289,6 +295,30 @@
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.11.0.3922</version>
             </plugin>
             <plugin>
                 <groupId>org.openapitools</groupId>

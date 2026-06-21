@@ -1,9 +1,8 @@
 # =============================================================================
 # GitLab CI/CD — cinema-api
-# Step-by-step setup: add one stage at a time, push, verify in GitLab → CI/CD → Pipelines
+# Pipeline: test → (build || sonar) in parallel → publish
 # =============================================================================
 
-# Avoid duplicate pipelines: if an MR is open, run MR pipeline only (not branch + MR)
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -13,37 +12,40 @@ workflow:
 
 stages:
   - test
-  - build
+  - build-quality
   - publish
 
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
 
-# Reuse downloaded Maven dependencies between pipeline runs
 cache:
   key: "${CI_COMMIT_REF_SLUG}"
   paths:
     - .m2/repository
 
 # -----------------------------------------------------------------------------
-# STEP 1 — TEST
-# Runs unit + integration tests on every push and merge request
+# TEST — runs tests + JaCoCo coverage report (used by sonar job)
+# Requires GitLab CI variable: none
 # -----------------------------------------------------------------------------
 test:
   stage: test
   image: maven:3.9-eclipse-temurin-17
   script:
-    - mvn test -B
+    - mvn verify -B
+  artifacts:
+    paths:
+      - target/site/jacoco/jacoco.xml
+      - target/classes
+    expire_in: 1 day
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH
 
 # -----------------------------------------------------------------------------
-# STEP 2 — BUILD (add when Step 1 passes)
-# Produces the JAR artifact for the publish stage
+# BUILD — runs in parallel with sonar after test
 # -----------------------------------------------------------------------------
 build:
-  stage: build
+  stage: build-quality
   image: maven:3.9-eclipse-temurin-17
   script:
     - mvn package -DskipTests -B
@@ -58,9 +60,33 @@ build:
     - if: $CI_COMMIT_BRANCH
 
 # -----------------------------------------------------------------------------
-# STEP 3 — PUBLISH (add when Step 2 passes)
-# Builds and pushes Docker image to GitLab Container Registry
-# Requires: Settings → General → Visibility → Container Registry enabled
+# SONAR — code quality analysis on SonarCloud (parallel with build)
+# Requires GitLab CI variable: SONAR_TOKEN (from sonarcloud.io → My Account → Security)
+# -----------------------------------------------------------------------------
+sonar:
+  stage: build-quality
+  image: maven:3.9-eclipse-temurin-17
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}-sonar"
+    paths:
+      - .sonar/cache
+      - .m2/repository
+  script:
+    - mvn compile sonar:sonar -DskipTests -Dsonar.token=$SONAR_TOKEN -B
+  needs:
+    - job: test
+      artifacts: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "main"
+  allow_failure: true
+
+# -----------------------------------------------------------------------------
+# PUBLISH — Docker image to GitLab Container Registry (develop / main only)
 # -----------------------------------------------------------------------------
 publish:
   stage: publish

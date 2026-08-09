@@ -20,4 +20,6 @@ public interface CinemaRepository extends JpaRepository<Cinema, Long> {
      * @return list of cinemas in the specified city
      */
     List<Cinema> findByCityEntityName(String cityName);
+
+    int countByCityEntityId(Long cityId);
 }

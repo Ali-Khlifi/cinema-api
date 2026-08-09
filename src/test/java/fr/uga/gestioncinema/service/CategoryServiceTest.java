@@ -13,11 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for {@link CategoryServiceImp} using Mockito only.
@@ -29,6 +30,8 @@ class CategoryServiceTest {
 
     private static final Long CATEGORY_ID = 1L;
     private static final String CATEGORY_NAME = "Action";
+    private static final String UPDATED_NAME = "Updated Category";
+    private static final String DELETED_NAME = "Category to delete";
 
     @Mock
     private CategorieRepository repository;
@@ -100,5 +103,72 @@ class CategoryServiceTest {
         verify(mapper).toEntity(input);
         verify(repository).save(entity);
         verify(mapper).toDto(entity);
+    }
+
+    @Test
+    @DisplayName("update should return updated Category")
+    void update_shouldReturnCategory(){
+        // Arrange
+        CategoryDto existingEntity = CategoryDto.builder().id(CATEGORY_ID).name(UPDATED_NAME).build();
+        CategoryDto expected = CategoryDto.builder().id(CATEGORY_ID).name(UPDATED_NAME).build();
+
+        existingEntity.setId(CATEGORY_ID);
+        existingEntity.setName(UPDATED_NAME);
+
+        when(repository.findById(CATEGORY_ID)).thenReturn(Optional.of(entity));
+        when(mapper.toDto(entity)).thenReturn(expected);
+
+        // Act
+        CategoryDto result = categoryService.update(existingEntity);
+
+        // Assert
+        assertThat(result).isEqualTo(expected);
+        verify(mapper).update(existingEntity, entity);
+    }
+    @Test
+    @DisplayName("should return all Category entities")
+    void fetchAll_shouldReturnAllCategories(){
+        // Arrange
+        List<CategoryDto> expectedDtos = Arrays.asList(
+                CategoryDto.builder().id(1L).name("Category 1").build(),
+                CategoryDto.builder().id(2L).name("Category 2").build(),
+                CategoryDto.builder().id(3L).name("Category 3").build()
+        );
+        List<Category> entities = Arrays.asList(
+                Category.builder().id(1L).name("Category 1").build(),
+                Category.builder().id(2L).name("Category 2").build(),
+                Category.builder().id(3L).name("Category 3").build()
+        );
+        when(repository.findAll()).thenReturn(entities);
+        when(mapper.toDto(entities.get(0))).thenReturn(expectedDtos.get(0));
+        when(mapper.toDto(entities.get(1))).thenReturn(expectedDtos.get(1));
+        when(mapper.toDto(entities.get(2))).thenReturn(expectedDtos.get(2));
+
+        // Act
+        List<CategoryDto> result = categoryService.fetchAll();
+
+        // Assert
+        assertThat(result).isEqualTo(expectedDtos);
+        assertThat(result).hasSize(3);
+        verify(repository).findAll();
+    }
+    @Test
+    @DisplayName("should delete Category By id")
+    void deleteCategory(){
+        // Arrange
+        Category existingCategory = Category.builder()
+                .id(CATEGORY_ID)
+                .name(DELETED_NAME)
+                .build();
+
+        when(repository.findById(CATEGORY_ID)).thenReturn(Optional.of(existingCategory));
+        doNothing().when(repository).deleteById(CATEGORY_ID);
+
+        // Act
+        categoryService.delete(CATEGORY_ID);
+
+        // Assert
+        verify(repository).findById(CATEGORY_ID);
+        verify(repository).deleteById(CATEGORY_ID);
     }
 }

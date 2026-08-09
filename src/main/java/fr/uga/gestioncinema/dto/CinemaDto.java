@@ -13,6 +13,7 @@ public class CinemaDto {
     private Long id;
     private String name;
     private int numberOfRooms;
+    private boolean hasCoffee;
     private Long cityId;
     
     // Detailed address fields

@@ -29,6 +29,11 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public void delete(Long id) {
+        final var category = repository.findById(id)
+                .orElseThrow(() -> customErrorService.customErrorException(
+                        "Category not found with id: " + id,
+                        HttpStatus.NOT_FOUND
+                ));
         repository.deleteById(id);
     }
 

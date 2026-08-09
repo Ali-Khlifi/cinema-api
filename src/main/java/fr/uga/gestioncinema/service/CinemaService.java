@@ -16,4 +16,13 @@ public interface CinemaService {
     CinemaDto update(@Valid CinemaDto dto);
     List<CinemaDto> findByCity(CityDto dto);
     void delete(Long id);
+
+    /** Returns how many cinemas exist in the given city. */
+    int countByCityId(Long cityId);
+
+    /** Returns the total number of seats across all rooms of the given cinema. */
+    int countSeatsByCinemaId(Long cinemaId);
+
+    /** Returns true if the cinema has a coffee shop. */
+    boolean hasCoffee(Long cinemaId);
 }

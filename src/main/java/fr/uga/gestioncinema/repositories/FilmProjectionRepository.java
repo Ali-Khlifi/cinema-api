@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,4 +29,12 @@ public interface FilmProjectionRepository extends JpaRepository<FilmProjection, 
            "WHERE r.id = :roomId " +
            "ORDER BY fp.projectionDate, fp.startTime")
     List<FilmProjection> findUniqueProjectionsByRoomId(@Param("roomId") Long roomId);
+
+    /**
+     * Find film projections by date
+     * @param date
+     * @return
+     */
+    List<FilmProjection> findByProjectionDate(LocalDate date);
+
 }

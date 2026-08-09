@@ -17,4 +17,12 @@ public interface RoomService {
     List<RoomDto> findByCinema(CinemaDto dto);
     List<RoomDto> findByCinemaId(Long cinemaId);
     void delete(Long id);
+
+    /**
+     * Returns true if the room is full for the given film projection
+     * (occupied tickets >= room capacity).
+     */
+    boolean isFull(Long roomId, Long filmProjectionId);
+
+    int countAvailableSeats(Long roomId, Long filmProjectionId);
 }

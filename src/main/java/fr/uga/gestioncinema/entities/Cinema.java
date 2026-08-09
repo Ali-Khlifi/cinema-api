@@ -43,6 +43,9 @@ public class Cinema implements Serializable {
     
     @Column(name = "number_of_rooms")
     private int numberOfRooms;
+
+    @Column(name = "has_coffee", nullable = false)
+    private boolean hasCoffee = false;
     
     // Bidirectional association - mappedBy "cinema" because OneToMany is on Cinema side
     @OneToMany(mappedBy = "cinema", cascade = CascadeType.REMOVE)

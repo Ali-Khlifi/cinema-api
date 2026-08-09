@@ -1,0 +1,34 @@
+=== Tests unitaires — reflex AAA (entretien) ===
+
+Ordre mental automatique (pas Arrange en premier) :
+
+1) ACT — Quelle méthode je teste, avec quels args ?
+   → ex: cinemaService.countByCityId(CITY_ID)
+
+2) ASSERT — Qu’est-ce que “ça a marché” veut dire ?
+   → ex: résultat = 3 (+ parfois verify le repo)
+
+3) ARRANGE — De quoi le service a-t-il besoin pour arriver là ?
+   → ex: when(repository.countByCityEntityId(CITY_ID)).thenReturn(3)
+
+Phrase réflexe :
+Given les dépendances se comportent comme X
+When j’appelle la méthode
+Then j’obtiens Y (et j’ai bien appelé Z)
+
+Constantes / données de test :
+- Elles naissent du besoin Act + Assert, pas l’inverse.
+- Ex: Act impose CITY_ID=10L, Assert impose EXPECTED_CINEMA_COUNT=3
+- Puis Arrange branche le mock avec ces mêmes constantes.
+- Une constante = une intention claire (pas de magic number).
+
+Rappels mocks :
+- Mock = ce que le service appelle (repo, mapper…)
+- Ne pas mocker la classe sous test
+- Arrange = uniquement ce dont l’Act a besoin
+- when(...).thenReturn(...) = "SI cet appel avec ces args, ALORS renvoie cette valeur"
+- Ce n’est PAS une fausse base : on programme une réponse, on ne “lit” pas des données mockées
+- On compare : retour du service vs valeur attendue (que toi tu as choisie)
+
+TDD :
+Rouge (test échoue) → Vert (implémentation minimale) → Refactor

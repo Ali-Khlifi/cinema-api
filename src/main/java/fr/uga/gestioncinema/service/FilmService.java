@@ -21,4 +21,10 @@ public interface FilmService {
     byte[] getMediaFilm(Long id);
 
     String determineMediaType(byte[] media);
+
+    FilmDto findByTitle(String title);
+
+    boolean hasMedia(Long id);
+
+    List<FilmDto> findByCategoryId(Long categoryId);
 }

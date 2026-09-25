@@ -107,5 +107,30 @@ public class FilmServiceImpl implements FilmService {
         }
         return null;
     }
+
+    @Override
+    public FilmDto findByTitle(String title) {
+
+        Film film = filmRepository.findByTitle(title)
+                .orElseThrow(()-> customErrorService.customErrorException("NOT FOUND", HttpStatus.NOT_FOUND));
+
+        return filmMapper.toDto(film);
+    }
+
+    @Override
+    public boolean hasMedia(Long id) {
+        Film film = filmRepository.findById(id)
+                .orElseThrow(() -> customErrorService.customErrorException("NOT FOUND", HttpStatus.NOT_FOUND));
+        byte[] media = film.getMedia();
+        return media != null && media.length > 0;
+    }
+
+    @Override
+    public List<FilmDto> findByCategoryId(Long categoryId) {
+        return filmRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(filmMapper::toDto)
+                .toList();
+    }
 }
 

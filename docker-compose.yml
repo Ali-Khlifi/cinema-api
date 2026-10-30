@@ -132,8 +132,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/db_cinema
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: admin
+      SERVER_PORT: 8082
       SERVER_SERVLET_CONTEXT_PATH: /api
       KEYCLOAK_URL: http://keycloak:8080
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/certs
     networks:
       - kong-net
     depends_on:

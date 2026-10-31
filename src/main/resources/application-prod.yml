@@ -26,6 +26,14 @@ spring:
 
 server:
   port: ${PORT:8080}
+
+# Required in production. ProdS3StartupCheck rejects a missing bucket, region, or AWS credentials.
+cinema:
+  storage:
+    s3:
+      bucket: ${CINEMA_S3_BUCKET:}
+      region: ${CINEMA_S3_REGION:}
+      key-prefix: ${CINEMA_S3_KEY_PREFIX:posters/}
   compression:
     enabled: true
 

@@ -34,6 +34,13 @@ web:
   cors:
     allowed-origins: "http://localhost:4200"
 
+cinema:
+  storage:
+    s3:
+      bucket: ""
+      region: ""
+      key-prefix: posters/
+
 logging:
   level:
     org.springframework.security: WARN

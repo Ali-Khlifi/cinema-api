@@ -136,6 +136,9 @@ services:
       SERVER_SERVLET_CONTEXT_PATH: /api
       KEYCLOAK_URL: http://keycloak:8080
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/cinemas-app/protocol/openid-connect/certs
+      CINEMA_S3_BUCKET: ${CINEMA_S3_BUCKET:-}
+      CINEMA_S3_REGION: ${CINEMA_S3_REGION:-}
+      CINEMA_S3_KEY_PREFIX: ${CINEMA_S3_KEY_PREFIX:-posters/}
     networks:
       - kong-net
     depends_on:

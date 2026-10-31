@@ -19,6 +19,7 @@
         <springdoc.version>2.0.3</springdoc.version>
         <swaggerparser.version>2.1.3</swaggerparser.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
+        <aws.sdk.version>2.25.70</aws.sdk.version>
         <lombok.mapstruct.version>0.2.0</lombok.mapstruct.version>
         <openapitools.jackson.version>0.2.3</openapitools.jackson.version>
         <openapitools.generator.version>5.1.0</openapitools.generator.version>
@@ -166,6 +167,18 @@
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
             <version>24.3.0</version>
+        </dependency>
+
+        <!-- Private S3 poster storage. Credentials come from the default AWS chain, not from this file. -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>${aws.sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>url-connection-client</artifactId>
+            <version>${aws.sdk.version}</version>
         </dependency>
         
         <!--PROD-->

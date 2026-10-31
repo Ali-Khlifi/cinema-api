@@ -55,6 +55,15 @@ web:
   cors:
     allowed-origins: "http://localhost:4200"
 
+# Poster storage. Empty in local dev until a bucket exists.
+# Credentials are AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY, never written here.
+cinema:
+  storage:
+    s3:
+      bucket: ${CINEMA_S3_BUCKET:}
+      region: ${CINEMA_S3_REGION:}
+      key-prefix: ${CINEMA_S3_KEY_PREFIX:posters/}
+
 logging:
   level:
     org.hibernate.SQL: debug

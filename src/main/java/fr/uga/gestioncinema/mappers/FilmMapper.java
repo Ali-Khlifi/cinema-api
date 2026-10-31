@@ -26,6 +26,7 @@ public interface FilmMapper {
     Film toEntity(FilmDto filmDto);
 
     @Mapping(target = "media", ignore = true) // Media is handled separately via upload/download endpoints
+    @Mapping(target = "posterKey", ignore = true) // Set only by the S3 poster upload, not by the public film payload
     @Mapping(target = "filmProjections", ignore = true)
     FilmDto toDto(FilmOpenApiModel model);
 

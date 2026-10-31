@@ -38,6 +38,10 @@ public class Film implements Serializable {
     
     @Column(name = "media", columnDefinition = "bytea")
     private byte[] media;
+
+    /** S3 object key of the poster. Null until a poster is uploaded. */
+    @Column(name = "poster_key", length = 512)
+    private String posterKey;
     
     @OneToMany(mappedBy = "film")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

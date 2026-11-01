@@ -16,6 +16,7 @@ public final class S3StorageRules {
             throw new IllegalStateException("CINEMA_S3_REGION is required in production");
         }
         properties.normalizedKeyPrefix();
+        properties.presignTtl();
     }
 
     private static boolean isBlank(String value) {

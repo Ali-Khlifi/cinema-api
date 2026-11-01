@@ -6,9 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 /**
- * Builds the S3 client only when a bucket and a region are configured.
+ * Builds the S3 client and the presigner only when a bucket and a region are configured.
  * Credentials stay on the AWS default chain (environment or IAM role).
  */
 @Configuration
@@ -20,6 +21,16 @@ public class S3StorageConfiguration {
     public S3Client posterS3Client(S3StorageProperties properties) {
         properties.normalizedKeyPrefix();
         return S3Client.builder()
+                .region(Region.of(properties.getRegion().trim()))
+                .build();
+    }
+
+    @Bean(destroyMethod = "close")
+    @ConditionalOnExpression("!'${cinema.storage.s3.bucket:}'.trim().isEmpty() && !'${cinema.storage.s3.region:}'.trim().isEmpty()")
+    public S3Presigner posterS3Presigner(S3StorageProperties properties) {
+        properties.normalizedKeyPrefix();
+        properties.presignTtl();
+        return S3Presigner.builder()
                 .region(Region.of(properties.getRegion().trim()))
                 .build();
     }

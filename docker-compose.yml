@@ -139,6 +139,7 @@ services:
       CINEMA_S3_BUCKET: ${CINEMA_S3_BUCKET:-}
       CINEMA_S3_REGION: ${CINEMA_S3_REGION:-}
       CINEMA_S3_KEY_PREFIX: ${CINEMA_S3_KEY_PREFIX:-posters/}
+      CINEMA_S3_PRESIGN_SECONDS: ${CINEMA_S3_PRESIGN_SECONDS:-900}
     networks:
       - kong-net
     depends_on:

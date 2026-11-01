@@ -44,6 +44,17 @@ class S3StorageRulesTest {
         S3StorageRules.requireProductionSettings(properties);
 
         assertThat(properties.normalizedKeyPrefix()).isEqualTo("posters/");
+        assertThat(properties.presignTtl()).isEqualTo(java.time.Duration.ofMinutes(15));
+    }
+
+    @Test
+    void productionRejectsAPresignTtlOutsideTheAllowedWindow() {
+        S3StorageProperties properties = configured("cinema-posters-prod", "eu-west-3");
+        properties.setPresignTtlSeconds(10);
+
+        assertThatThrownBy(() -> S3StorageRules.requireProductionSettings(properties))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("CINEMA_S3_PRESIGN_SECONDS");
     }
 
     private static S3StorageProperties configured(String bucket, String region) {

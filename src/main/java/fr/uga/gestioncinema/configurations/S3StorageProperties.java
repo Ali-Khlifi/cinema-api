@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.time.Duration;
+
 /**
  * Poster bucket settings. Values come from the environment.
  * Access keys are not stored here: the AWS SDK default chain reads them.
@@ -22,6 +24,9 @@ public class S3StorageProperties {
 
     /** Maximum accepted poster size. Default 5 MiB. */
     private long maxBytes = 5_242_880L;
+
+    /** Lifetime of a presigned read URL. Default 15 minutes. */
+    private long presignTtlSeconds = 900;
 
     public boolean isConfigured() {
         return !isBlank(bucket) && !isBlank(region);
@@ -42,6 +47,16 @@ public class S3StorageProperties {
             prefix = prefix + "/";
         }
         return prefix;
+    }
+
+    /**
+     * Lifetime of a browser-readable poster URL. A leaked URL must expire quickly.
+     */
+    public Duration presignTtl() {
+        if (presignTtlSeconds < 60 || presignTtlSeconds > 3_600) {
+            throw new IllegalStateException("CINEMA_S3_PRESIGN_SECONDS must be between 60 and 3600");
+        }
+        return Duration.ofSeconds(presignTtlSeconds);
     }
 
     private static boolean isBlank(String value) {

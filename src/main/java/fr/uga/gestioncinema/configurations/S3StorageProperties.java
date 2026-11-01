@@ -20,6 +20,9 @@ public class S3StorageProperties {
     /** Object key prefix. Posters are stored only under this prefix. */
     private String keyPrefix = "posters/";
 
+    /** Maximum accepted poster size. Default 5 MiB. */
+    private long maxBytes = 5_242_880L;
+
     public boolean isConfigured() {
         return !isBlank(bucket) && !isBlank(region);
     }

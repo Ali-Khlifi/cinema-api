@@ -3,6 +3,7 @@ package fr.uga.gestioncinema.web;
 import fr.uga.gestioncinema.mappers.FilmMapper;
 import fr.uga.gestioncinema.repositories.FilmRepository;
 import fr.uga.gestioncinema.service.FilmService;
+import fr.uga.gestioncinema.service.PosterUploadService;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.FilmApi;
 import org.openapitools.model.FilmOpenApiModel;
@@ -11,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +29,7 @@ public class FilmController implements FilmApi {
     private final FilmService filmService;
     private final FilmMapper filmMapper;
     private final FilmRepository filmRepository;
+    private final PosterUploadService posterUploadService;
 
     @Override
     public ResponseEntity<FilmOpenApiModel> create(FilmOpenApiModel model) {
@@ -52,6 +57,13 @@ public class FilmController implements FilmApi {
     @Override
     public ResponseEntity<List<FilmOpenApiModel>> findAll() {
         return ResponseEntity.ok().body(filmMapper.toOpenApiModelList(filmService.fetchAll()));
+    }
+
+    @PostMapping(path = "/films/{id}/poster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadPoster(@PathVariable("id") Long id,
+                                             @RequestParam("file") MultipartFile file) {
+        posterUploadService.upload(id, file);
+        return ResponseEntity.noContent().build();
     }
 
     // upload media for a film

@@ -1,0 +1,5 @@
+name: dev
+variables:
+  - name: base_url
+    value: http://localhost:8082
+    description: ""

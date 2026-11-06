@@ -1,0 +1,26 @@
+info:
+  name: Poster film photo
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/films/1/poster"
+  body:
+    type: multipart-form
+    data:
+      - name: file
+        type: file
+        value:
+          - D:\AutoFormations\AutoFormation_2023\Gestion-Cinema\cinema-api\images\needForSpeed.jpg
+        contentType: image/jpeg
+  auth:
+    type: bearer
+    token: "{{access_token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

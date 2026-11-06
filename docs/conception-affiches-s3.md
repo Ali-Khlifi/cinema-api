@@ -79,7 +79,17 @@ En local, ces variables sont dans `cinema-api/.env` et passées au seul conteneu
 
 En production, le profil `prod` refuse de démarrer s’il manque le bucket, la région, un préfixe sain, une durée autorisée, ou des identifiants AWS. Le bucket de prod n’est pas encore branché sur le VPS.
 
-Le healthcheck Docker de l’API ne dépend pas de S3. Une coupure AWS ne doit pas redémarrer le serveur et interrompre les réservations.
+## Santé
+
+L’API publie Postgres et le bucket au même endroit :
+
+`http://localhost:8082/api/actuator/health`
+
+La réponse contient `db` et `s3`. `s3` est `UP` quand le bucket répond, `UNKNOWN` quand aucun bucket n’est configuré, `DOWN` quand le bucket configuré est injoignable. Si `db` ou `s3` est `DOWN`, l’adresse répond 503.
+
+Le contrôle appelle `HeadBucket`. L’utilisateur IAM doit avoir `s3:ListBucket` sur le bucket, en plus de `GetObject`, `PutObject` et `DeleteObject` sur `posters/*`.
+
+En production, la même route est `http://localhost:8080/api/actuator/health` dans le conteneur, et `https://cinema.alikhlifi.ovh/api/actuator/health` derrière Nginx. Le healthcheck Docker de l’API appelle déjà cette route.
 
 ## Vérification locale
 
@@ -90,10 +100,3 @@ Faite le 6 novembre 2026 :
 - `http://localhost:4200/salles/1` affiche l’image, réponse S3 200.
 
 Le jeton Keycloak utilisé par Bruno ou par le front expire au bout de 5 minutes. L’URL d’affiche, elle, expire au bout de 15 minutes. Une nouvelle lecture de la séance en calcule une autre.
-
-## Hors de ce livrable
-
-- Import des films depuis TMDB (P0.2).
-- Garde administrateur (P1.1).
-- Branchement du bucket de prod et de ses clés sur le VPS.
-- Suppression de la colonne `media`.

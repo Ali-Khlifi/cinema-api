@@ -1,0 +1,16 @@
+opencollection: 1.0.0
+info:
+  name: "cinema-app"
+  type: workspace
+
+collections:
+  - name: "API-S3"
+    path: "collections/API-S3"
+  - name: "Keycloak-API"
+    path: "collections/Keycloak-API"
+  - name: "HealthCheck-API"
+    path: "collections/HealthCheck-API"
+
+specs:
+
+docs: ''

@@ -59,7 +59,8 @@ management:
         include: health,info
   endpoint:
     health:
-      show-details: when-authorized
+      show-components: always
+      show-details: never
 
 # Application info (version from pom.xml)
 info:

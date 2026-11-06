@@ -38,6 +38,12 @@ server:
   servlet:
     context-path: /api
 
+management:
+  endpoint:
+    health:
+      show-components: always
+      show-details: never
+
 keycloak:
   auth-server_url: http://localhost:8088
   realm: cinemas-app

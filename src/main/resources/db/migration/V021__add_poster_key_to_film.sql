@@ -1,4 +1,4 @@
-²-- S3 object key for the film poster. Nullable: films without a poster stay valid.
+-- S3 object key for the film poster. Nullable: films without a poster stay valid.
 -- The legacy bytea column "media" remains until posters are served from S3.
 
 ALTER TABLE film

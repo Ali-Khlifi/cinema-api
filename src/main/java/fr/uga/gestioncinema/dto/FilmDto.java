@@ -19,6 +19,8 @@ public class FilmDto {
     private String description;
     private byte[] media;
     private String posterKey;
+    private Integer tmdbId;
+    private String trailerYoutubeKey;
     private LocalDate releaseDate;
     private Long categoryId;
     private Collection<FilmProjectionDto> filmProjections;

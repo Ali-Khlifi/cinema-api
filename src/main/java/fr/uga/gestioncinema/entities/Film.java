@@ -42,6 +42,14 @@ public class Film implements Serializable {
     /** S3 object key of the poster. Null until a poster is uploaded. */
     @Column(name = "poster_key", length = 512)
     private String posterKey;
+
+    /** TMDB movie id. Null for films that were not imported. */
+    @Column(name = "tmdb_id", unique = true)
+    private Integer tmdbId;
+
+    /** YouTube video id of the trailer. Null when TMDB has no trailer. */
+    @Column(name = "trailer_youtube_key", length = 32)
+    private String trailerYoutubeKey;
     
     @OneToMany(mappedBy = "film")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

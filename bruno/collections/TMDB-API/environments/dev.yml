@@ -1,0 +1,8 @@
+name: dev
+variables:
+  - name: base_url
+    value: http://localhost:8082
+    description: ""
+  - name: access_token
+    value: ""
+    description: "Jeton seul. L'en-tête envoyé est Authorization: Bearer suivi de cette valeur."

@@ -4,6 +4,8 @@ import fr.uga.gestioncinema.mappers.FilmMapper;
 import fr.uga.gestioncinema.repositories.FilmRepository;
 import fr.uga.gestioncinema.service.FilmService;
 import fr.uga.gestioncinema.service.PosterUploadService;
+import fr.uga.gestioncinema.service.TmdbFilmImportService;
+import fr.uga.gestioncinema.service.TmdbImportResult;
 import lombok.RequiredArgsConstructor;
 import org.openapitools.api.FilmApi;
 import org.openapitools.model.FilmOpenApiModel;
@@ -30,6 +32,7 @@ public class FilmController implements FilmApi {
     private final FilmMapper filmMapper;
     private final FilmRepository filmRepository;
     private final PosterUploadService posterUploadService;
+    private final TmdbFilmImportService tmdbFilmImportService;
 
     @Override
     public ResponseEntity<FilmOpenApiModel> create(FilmOpenApiModel model) {
@@ -64,6 +67,11 @@ public class FilmController implements FilmApi {
                                              @RequestParam("file") MultipartFile file) {
         posterUploadService.upload(id, file);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/films/import/tmdb")
+    public ResponseEntity<TmdbImportResult> importFromTmdb() {
+        return ResponseEntity.ok(tmdbFilmImportService.importPopularFilms());
     }
 
     // upload media for a film

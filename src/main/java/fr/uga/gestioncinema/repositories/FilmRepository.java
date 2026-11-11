@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface FilmRepository extends JpaRepository<Film, Long> {
 
     Optional<Film> findByTitle(String title);
+    Optional<Film> findByTmdbId(Integer tmdbId);
 
     List<Film> findByCategoryId(Long id);
 

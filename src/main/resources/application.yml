@@ -71,6 +71,8 @@ cinema:
       key-prefix: ${CINEMA_S3_KEY_PREFIX:posters/}
       max-bytes: ${CINEMA_S3_MAX_BYTES:5242880}
       presign-ttl-seconds: ${CINEMA_S3_PRESIGN_SECONDS:900}
+  tmdb:
+    api-key: ${CINEMA_TMDB_API_KEY:}
 
 logging:
   level:

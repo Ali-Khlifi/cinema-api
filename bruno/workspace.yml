@@ -10,6 +10,8 @@ collections:
     path: "collections/Keycloak-API"
   - name: "HealthCheck-API"
     path: "collections/HealthCheck-API"
+  - name: "TMDB-API"
+    path: "collections/TMDB-API"
 
 specs:
 

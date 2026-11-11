@@ -221,6 +221,9 @@ components:
         posterUrl:
           type: string
           description: 'Short-lived presigned URL of the private poster. Null when the film has no poster.'
+        trailerYoutubeKey:
+          type: string
+          description: 'YouTube video id of the trailer. Null when the film has no trailer.'
 
     'FilmProjectionOpenApiModel':
       type: object

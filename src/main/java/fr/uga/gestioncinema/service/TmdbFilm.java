@@ -13,6 +13,7 @@ public record TmdbFilm(
         String director,
         LocalDate releaseDate,
         String trailerYoutubeKey,
-        String categoryName
+        String categoryName,
+        String posterPath
 ) {
 }

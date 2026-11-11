@@ -30,6 +30,7 @@ class TmdbFilmParserTest {
                   "overview": "Paul Atreides",
                   "runtime": 155,
                   "release_date": "2021-09-15",
+                  "poster_path": "/dune.jpg",
                   "genres": [{"name": "Science-Fiction"}, {"name": "Drame"}],
                   "credits": {"crew": [
                     {"job": "Writer", "name": "Quelqu'un"},
@@ -52,6 +53,16 @@ class TmdbFilmParserTest {
         assertThat(film.releaseDate()).isEqualTo(LocalDate.of(2021, 9, 15));
         assertThat(film.trailerYoutubeKey()).isEqualTo("french");
         assertThat(film.categoryName()).isEqualTo("Drame");
+        assertThat(film.posterPath()).isEqualTo("/dune.jpg");
+    }
+
+    @Test
+    void ignoresAPosterPathThatIsNotAFileName() throws Exception {
+        String json = """
+                {"id": 1, "title": "Dune", "poster_path": "https://evil.example/a.jpg"}
+                """;
+
+        assertThat(TmdbFilmParser.film(mapper.readTree(json)).orElseThrow().posterPath()).isNull();
     }
 
     @Test

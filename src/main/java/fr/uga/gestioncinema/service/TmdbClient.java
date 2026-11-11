@@ -61,6 +61,29 @@ public class TmdbClient {
         return films;
     }
 
+    public byte[] downloadPoster(String posterPath) {
+        if (posterPath == null || !posterPath.matches("/[A-Za-z0-9._-]+")) {
+            throw new IllegalArgumentException("Rejected TMDB poster path");
+        }
+        URI uri = URI.create("https://image.tmdb.org/t/p/w780" + posterPath);
+        HttpRequest request = HttpRequest.newBuilder(uri)
+                .timeout(REQUEST_TIMEOUT)
+                .GET()
+                .build();
+        try {
+            HttpResponse<byte[]> response = httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
+            if (response.statusCode() != 200 || response.body() == null) {
+                throw new IllegalStateException("TMDB poster answered HTTP " + response.statusCode());
+            }
+            return response.body();
+        } catch (InterruptedException failure) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("TMDB import was interrupted");
+        } catch (IOException failure) {
+            throw new IllegalStateException("TMDB could not be reached");
+        }
+    }
+
     private JsonNode read(String path, String query) {
         String key = URLEncoder.encode(properties.getApiKey().trim(), StandardCharsets.UTF_8);
         URI uri = URI.create(BASE + path + "?" + query + "&api_key=" + key);

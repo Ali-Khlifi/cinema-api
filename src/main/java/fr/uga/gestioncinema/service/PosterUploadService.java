@@ -79,6 +79,40 @@ public class PosterUploadService {
         }
     }
 
+    /**
+     * Stores bytes already downloaded by the API. An existing poster key is left unchanged.
+     */
+    public void storeDownloaded(Film film, byte[] content) {
+        if (film == null || film.getId() == null) {
+            throw customErrorService.customErrorException(
+                    "Film must be saved before its poster", HttpStatus.BAD_REQUEST);
+        }
+        if (film.getPosterKey() != null && !film.getPosterKey().isBlank()) {
+            return;
+        }
+        if (content == null || content.length == 0 || content.length > properties.getMaxBytes()) {
+            throw customErrorService.customErrorException(
+                    "Poster must be a non-empty image within the size limit", HttpStatus.BAD_REQUEST);
+        }
+        PosterImage.Detected detected = PosterImage.detect(content)
+                .orElseThrow(() -> customErrorService.customErrorException(
+                        "Poster must be a jpeg, png, or webp image", HttpStatus.BAD_REQUEST));
+        S3Client storage = posterStorage.getIfAvailable();
+        if (storage == null || !properties.isConfigured()) {
+            throw customErrorService.customErrorException(
+                    "Poster storage is not configured", HttpStatus.SERVICE_UNAVAILABLE);
+        }
+        String key = properties.normalizedKeyPrefix() + film.getId() + "/" + UUID.randomUUID() + "." + detected.extension();
+        put(storage, key, detected.contentType(), content);
+        try {
+            film.setPosterKey(key);
+            filmRepository.save(film);
+        } catch (RuntimeException failure) {
+            deleteQuietly(storage, key);
+            throw failure;
+        }
+    }
+
     private void put(S3Client storage, String key, String contentType, byte[] content) {
         try {
             storage.putObject(PutObjectRequest.builder()

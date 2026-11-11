@@ -26,6 +26,7 @@ public class TmdbFilmImportService {
     private final TmdbClient tmdbClient;
     private final FilmRepository filmRepository;
     private final CategorieRepository categorieRepository;
+    private final PosterUploadService posterUploadService;
     private final CustomErrorService customErrorService;
 
     @Transactional
@@ -41,12 +42,12 @@ public class TmdbFilmImportService {
             Optional<Film> existing = filmRepository.findByTmdbId(film.tmdbId());
             if (existing.isPresent()) {
                 copyDetails(existing.get(), film, false);
-                filmRepository.save(existing.get());
+                storePoster(filmRepository.save(existing.get()), film.posterPath());
                 updated++;
             } else {
                 Film createdFilm = new Film();
                 copyDetails(createdFilm, film, true);
-                filmRepository.save(createdFilm);
+                storePoster(filmRepository.save(createdFilm), film.posterPath());
                 created++;
             }
         }
@@ -59,6 +60,17 @@ public class TmdbFilmImportService {
         } catch (RuntimeException failure) {
             log.warn("TMDB import failed: {}", failure.getClass().getSimpleName());
             throw customErrorService.customErrorException("TMDB import failed", HttpStatus.BAD_GATEWAY);
+        }
+    }
+
+    private void storePoster(Film film, String posterPath) {
+        if (posterPath == null || (film.getPosterKey() != null && !film.getPosterKey().isBlank())) {
+            return;
+        }
+        try {
+            posterUploadService.storeDownloaded(film, tmdbClient.downloadPoster(posterPath));
+        } catch (RuntimeException failure) {
+            log.warn("TMDB poster was not stored for tmdb id {}", film.getTmdbId());
         }
     }
 

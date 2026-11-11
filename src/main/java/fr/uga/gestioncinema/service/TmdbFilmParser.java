@@ -61,7 +61,8 @@ public final class TmdbFilmParser {
                 clip(directorName(movie), DIRECTOR_MAX),
                 releaseDate(movie.path("release_date").asText("")),
                 trailerKey(movie.path("videos").path("results")),
-                categoryName(movie.path("genres"))));
+                categoryName(movie.path("genres")),
+                posterPath(movie)));
     }
 
     private static String directorName(JsonNode movie) {
@@ -104,6 +105,17 @@ public final class TmdbFilmParser {
             }
         }
         return bestKey;
+    }
+
+    /**
+     * TMDB poster paths look like /abc.jpg. Anything else is refused.
+     */
+    static String posterPath(JsonNode movie) {
+        String path = movie.path("poster_path").asText("").trim();
+        if (!path.matches("/[A-Za-z0-9._-]+")) {
+            return null;
+        }
+        return path;
     }
 
     private static String categoryName(JsonNode genres) {

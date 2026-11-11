@@ -36,6 +36,8 @@ class TmdbFilmImportServiceTest {
     @Mock
     private CategorieRepository categorieRepository;
     @Mock
+    private PosterUploadService posterUploadService;
+    @Mock
     private CustomErrorService customErrorService;
 
     private TmdbProperties properties;
@@ -46,7 +48,7 @@ class TmdbFilmImportServiceTest {
         properties = new TmdbProperties();
         properties.setApiKey("tmdb-test-key");
         service = new TmdbFilmImportService(
-                properties, tmdbClient, filmRepository, categorieRepository, customErrorService);
+                properties, tmdbClient, filmRepository, categorieRepository, posterUploadService, customErrorService);
     }
 
     @Test
@@ -60,23 +62,28 @@ class TmdbFilmImportServiceTest {
     }
 
     @Test
-    void createsAFilmAndKeepsThePosterEmpty() {
+    void createsAFilmAndStoresItsTmdbPoster() {
         Category drama = new Category();
         drama.setName("Drame");
         when(tmdbClient.popularFilms()).thenReturn(ListOfOne());
+        when(tmdbClient.downloadPoster("/dune.jpg")).thenReturn(new byte[]{1, 2, 3});
         when(filmRepository.findByTmdbId(438631)).thenReturn(Optional.empty());
         when(categorieRepository.findByName("Drame")).thenReturn(Optional.of(drama));
-        when(filmRepository.save(any(Film.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(filmRepository.save(any(Film.class))).thenAnswer(invocation -> {
+            Film film = invocation.getArgument(0);
+            film.setId(9L);
+            return film;
+        });
 
         TmdbImportResult result = service.importPopularFilms();
 
         assertThat(result.created()).isEqualTo(1);
         assertThat(result.updated()).isZero();
         verify(filmRepository).save(org.mockito.ArgumentMatchers.argThat(film ->
-                film.getPosterKey() == null
-                        && film.getTmdbId().equals(438631)
+                film.getTmdbId().equals(438631)
                         && film.getCategory() == drama
                         && "Dune".equals(film.getTitle())));
+        verify(posterUploadService).storeDownloaded(org.mockito.ArgumentMatchers.argThat(film -> film.getId().equals(9L)), any());
     }
 
     @Test
@@ -99,6 +106,7 @@ class TmdbFilmImportServiceTest {
         assertThat(existing.getPosterKey()).isEqualTo("posters/1/a.jpg");
         assertThat(existing.getMedia()).containsExactly(1, 2);
         verify(categorieRepository, never()).findByName(any());
+        verify(tmdbClient, never()).downloadPoster(any());
     }
 
     private static java.util.List<TmdbFilm> ListOfOne() {
@@ -110,6 +118,7 @@ class TmdbFilmImportServiceTest {
                 "Denis Villeneuve",
                 LocalDate.of(2021, 9, 15),
                 "french",
-                "Drame"));
+                "Drame",
+                "/dune.jpg"));
     }
 }

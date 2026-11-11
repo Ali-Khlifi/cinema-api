@@ -1,0 +1,27 @@
+info:
+  name: user-connexion
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{base_keycloak_url}}/realms/cinemas-app/protocol/openid-connect/token"
+  body:
+    type: form-urlencoded
+    data:
+      - name: grant_type
+        value: password
+      - name: client_id
+        value: cinemas-app-client
+      - name: username
+        value: alikhlifi.kh@gmail.com
+      - name: password
+        value: "{{process.env.KEYCLOAK_PASSWORD}}"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

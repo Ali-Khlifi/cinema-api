@@ -227,6 +227,9 @@ components:
           type: integer
           format: int64
           description: 'ID of the film category/genre'
+        posterUrl:
+          type: string
+          description: 'Short-lived presigned URL of the private poster. Null when the film has no poster.'
 
     Error:
       description: 'format message for error return HTTP'

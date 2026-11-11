@@ -38,6 +38,12 @@ server:
   servlet:
     context-path: /api
 
+management:
+  endpoint:
+    health:
+      show-components: always
+      show-details: never
+
 keycloak:
   auth-server_url: http://localhost:8088
   realm: cinemas-app
@@ -54,6 +60,17 @@ stripe:
 web:
   cors:
     allowed-origins: "http://localhost:4200"
+
+# Poster storage. Empty in local dev until a bucket exists.
+# Credentials are AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY, never written here.
+cinema:
+  storage:
+    s3:
+      bucket: ${CINEMA_S3_BUCKET:}
+      region: ${CINEMA_S3_REGION:}
+      key-prefix: ${CINEMA_S3_KEY_PREFIX:posters/}
+      max-bytes: ${CINEMA_S3_MAX_BYTES:5242880}
+      presign-ttl-seconds: ${CINEMA_S3_PRESIGN_SECONDS:900}
 
 logging:
   level:

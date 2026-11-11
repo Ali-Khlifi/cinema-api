@@ -18,6 +18,7 @@ public class FilmDto {
     private String director;
     private String description;
     private byte[] media;
+    private String posterKey;
     private LocalDate releaseDate;
     private Long categoryId;
     private Collection<FilmProjectionDto> filmProjections;

@@ -43,6 +43,8 @@ public abstract class FilmMapper {
 
     @Mapping(target = "media", ignore = true) // Media is handled separately via upload/download endpoints
     @Mapping(target = "posterKey", ignore = true) // Set only by the S3 poster upload, not by the public film payload
+    @Mapping(target = "tmdbId", ignore = true)
+    @Mapping(target = "trailerYoutubeKey", ignore = true)
     @Mapping(target = "filmProjections", ignore = true)
     @BeanMapping(ignoreUnmappedSourceProperties = "posterUrl")
     public abstract FilmDto toDto(FilmOpenApiModel model);

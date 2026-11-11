@@ -14,9 +14,10 @@ http:
         value:
           - D:\AutoFormations\AutoFormation_2023\Gestion-Cinema\cinema-api\images\needForSpeed.jpg
         contentType: image/jpeg
-  auth:
-    type: bearer
-    token: "{{access_token}}"
+  headers:
+    - name: Authorization
+      value: "Bearer {{access_token}}"
+  auth: none
 
 settings:
   encodeUrl: true

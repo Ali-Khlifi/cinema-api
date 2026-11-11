@@ -1,0 +1,11 @@
+name: dev
+variables:
+  - name: base_url
+    value: http://localhost:8082
+    description: ""
+  - name: base_keycloak_url
+    value: http://localhost:8088
+    description: ""
+  - name: access_token
+    value: ""
+    description: "Jeton Keycloak, valable 5 minutes. Le coller ici sans le mot Bearer."

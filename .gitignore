@@ -34,3 +34,9 @@ build/
 
 ### Application logs ###
 logs/
+
+### Local AWS credentials ###
+.env
+
+### Accidental frontend install in the API repo ###
+node_modules/

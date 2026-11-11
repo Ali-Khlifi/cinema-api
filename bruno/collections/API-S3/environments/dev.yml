@@ -8,4 +8,4 @@ variables:
     description: ""
   - name: access_token
     value: ""
-    description: "Jeton Keycloak, valable 5 minutes. Le coller ici sans le mot Bearer."
+    description: "Jeton seul. L'en-tête envoyé est Authorization: Bearer suivi de cette valeur."
